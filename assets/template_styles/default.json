@@ -1,0 +1,58 @@
+{
+  "portrait": {
+    "container_video_view": {
+      "visibility": 1,
+      "clickable": 1
+    },
+    "cta_banner": {
+      "visibility": 1,
+      "clickable": 1,
+      "displayTiming": {
+        "showDelay": 0,
+        "hideDelay": 0
+      }
+    },
+    "accessory": {
+      "visibility": 1,
+      "clickable": 1,
+      "displayTiming": {
+        "showDelay": 0,
+        "hideDelay": 0
+      }
+    },
+    "cta_card": {
+      "visibility": 1,
+      "clickable": 1,
+      "displayTiming": {
+        "showDelay": 0,
+        "hideDelay": 0
+      }
+    },
+    "cta_button": {
+      "visibility": 1,
+      "clickable": 1,
+      "displayTiming": {
+        "showDelay": 0,
+        "hideDelay": 0
+      }
+    },
+    "endcard_cta_view": {
+      "visibility": 1,
+      "clickable": 1
+    },
+    "endcard_cta_button": {
+      "visibility": 1,
+      "clickable": 1
+    }
+  },
+  "landscape": {
+    "cta_button": {
+      "visibility": 1,
+      "clickable": 1,
+      "displayTiming": {
+        "showDelay": 0,
+        "hideDelay": 0
+      }
+    }
+  }
+}
