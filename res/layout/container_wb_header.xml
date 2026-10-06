@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/video_header_view" android:background="@color/white" android:layout_width="match_parent" android:layout_height="@dimen/ad_48dp"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:layout_gravity="center_vertical" android:id="@id/ad_close" android:visibility="visible" android:layout_width="@dimen/ad_20dp" android:layout_height="@dimen/ad_20dp" android:layout_marginLeft="@dimen/ad_16dp" android:src="@mipmap/zmaticoo_b_close" android:contentDescription="@null" />
+    <LinearLayout android:layout_gravity="center" android:orientation="horizontal" android:id="@id/layout_function" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/btn_back" android:padding="@dimen/ad_14dp" android:layout_width="@dimen/ad_48dp" android:layout_height="@dimen/ad_48dp" android:src="@drawable/zmaticoo_back" android:contentDescription="@null" />
+        <View android:layout_width="@dimen/ad_80dp" android:layout_height="@dimen/ad_20dp" />
+        <ImageView android:id="@id/btn_forward" android:padding="@dimen/ad_14dp" android:layout_width="@dimen/ad_48dp" android:layout_height="@dimen/ad_48dp" android:src="@drawable/zmaticoo_back" android:rotation="180.0" />
+    </LinearLayout>
+</FrameLayout>

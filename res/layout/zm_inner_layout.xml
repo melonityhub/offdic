@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/container_wb_header" />
+    <FrameLayout android:background="@color/white" android:layout_width="match_parent" android:layout_height="match_parent">
+        <com.zmaticoo.sdk.base.common.webview.InnerWebView android:id="@id/zm_wb" android:layout_width="match_parent" android:layout_height="match_parent" />
+        <ProgressBar android:layout_gravity="top" android:id="@id/webview_progress" android:visibility="gone" android:layout_width="match_parent" android:layout_height="2.0dp" android:max="100" android:progress="0" android:progressDrawable="@drawable/zm_video_progress_bar" style="?android:progressBarStyleHorizontal" />
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/lea_404" android:visibility="gone" android:layout_width="match_parent" android:layout_height="match_parent">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/ad_20dp" android:src="@mipmap/zmaticoo_b_404" android:contentDescription="@null" />
+            <TextView android:textColor="@color/co_26" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/ad_16dp" android:text="@string/zmaticoo_inner_failed" />
+            <Button android:textSize="@dimen/cta_button_text_size16" android:textColor="@color/white" android:id="@id/refresh_button" android:background="@drawable/cta_press_has_app_selector" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/ad_80dp" android:layout_marginRight="@dimen/ad_80dp" android:text="@string/zmaticoo_inner_refresh" android:textAllCaps="false" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

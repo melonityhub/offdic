@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/white" />
+    <item android:gravity="center" android:drawable="@drawable/app_logo_sp" android:left="@dimen/splash_right_left_margin" android:top="@dimen/splash_top_bottom_margin" android:right="@dimen/splash_right_left_margin" android:bottom="@dimen/splash_top_bottom_margin" />
+</layer-list>

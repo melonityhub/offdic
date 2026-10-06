@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/native_image_container" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="fitCenter" android:contentDescription="@null" />
+    <ImageView android:id="@id/disclaimerMenu" android:background="@drawable/ad_close_dra" android:padding="2.0dp" android:visibility="gone" android:layout_width="@dimen/ad_20dp" android:layout_height="@dimen/ad_20dp" android:layout_marginTop="@dimen/ad_4dp" android:src="@mipmap/zmaticoo_more" android:contentDescription="@null" android:layout_marginEnd="@dimen/ad_12dp" android:layout_alignParentEnd="true" />
+    <com.zmaticoo.sdk.base.common.view.DisclaimerView android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@id/disclaimerLayout" android:background="@color/white" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" />
+</RelativeLayout>

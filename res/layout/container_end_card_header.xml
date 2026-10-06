@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/video_header_view" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/ad_25dp" android:layout_marginTop="@dimen/ad_60dp" android:layout_marginRight="@dimen/ad_25dp"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/ad_close" android:background="@drawable/ad_close_dra" android:padding="6.0dp" android:visibility="invisible" android:layout_width="@dimen/ad_24dp" android:layout_height="@dimen/ad_24dp" android:layout_marginLeft="@dimen/ad_close_margin_left_6dp" android:src="@mipmap/zmaticoo_ad_close" android:layout_alignParentEnd="true" />
+    <ImageView android:layout_gravity="end" android:id="@id/disclaimerMenu" android:background="@drawable/ad_close_dra" android:padding="2.0dp" android:visibility="gone" android:layout_width="@dimen/ad_24dp" android:layout_height="@dimen/ad_24dp" android:layout_marginLeft="@dimen/ad_close_margin_left_6dp" android:layout_marginTop="6.0dp" android:src="@mipmap/zmaticoo_more" android:layout_below="@id/ad_close" android:contentDescription="@null" android:layout_alignParentEnd="true" />
+</RelativeLayout>

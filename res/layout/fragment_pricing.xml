@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:tag="layout/fragment_pricing_0" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fast.dic.dict.views.CloudWordsView android:layout_width="match_parent" android:layout_height="match_parent" app:hideWords="true" />
+    <androidx.core.widget.NestedScrollView android:id="@id/scrollview" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView android:id="@id/plan_rv" android:tag="binding_1" android:paddingTop="@dimen/margin" android:paddingBottom="@dimen/margin" android:scrollbars="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="@dimen/margin" app:layoutManager="LinearLayoutManager" app:layout_constraintBottom_toTopOf="@id/cta_layout" app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toBottomOf="@id/subtitle_tv" />
+            <LinearLayout android:orientation="vertical" android:id="@id/features_layout" android:tag="binding_2" android:background="?tabBarBackground" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <include android:id="@id/pricing_header_layout" layout="@layout/pricing_sticky_header_layout" />
+                <androidx.recyclerview.widget.RecyclerView android:id="@id/features_rv" android:tag="binding_3" android:layout_width="match_parent" android:layout_height="wrap_content" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@id/divider_view" />
+                <Button android:textSize="@dimen/body0_font_size" android:textColor="@color/fdBlack" android:id="@id/restore_purchase_button" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="@dimen/margin" android:text="@string/restore_purchase" android:fontFamily="@font/iransansxregular" android:backgroundTint="@drawable/secondary_button_selector" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <include android:id="@id/pricing_sticky_header_layout" android:visibility="gone" layout="@layout/pricing_sticky_header_layout" />
+    <fast.dic.dict.views.CustomProgressbar android:id="@id/loading_spinner" android:visibility="gone" android:layout_width="match_parent" android:layout_height="match_parent" />
+</FrameLayout>

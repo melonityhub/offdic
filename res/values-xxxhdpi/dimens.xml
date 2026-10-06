@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="min_height_wod_widget">112.0dp</dimen>
+    <dimen name="min_width_wod_medium_widget">174.0dp</dimen>
+</resources>

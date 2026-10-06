@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="apd_admob_banner_background">#000000</color>
+    <color name="apd_admob_banner_headline_text_color">#ffffff</color>
+    <color name="free_months_badge_background">#730f5740</color>
+    <color name="free_months_badge_text">#00b39f</color>
+    <color name="plan2">#ff9cacff</color>
+</resources>

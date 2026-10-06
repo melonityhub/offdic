@@ -1,0 +1,15 @@
+package fast.dic.dict.presentation.fullscreen_modal;
+
+import android.view.View;
+
+/* JADX INFO: compiled from: D8$$SyntheticClass */
+/* JADX INFO: loaded from: classes11.dex */
+public final /* synthetic */ class FullscreenModal$$ExternalSyntheticLambda5 implements View.OnClickListener {
+    public /* synthetic */ FullscreenModal$$ExternalSyntheticLambda5() {
+    }
+
+    @Override // android.view.View.OnClickListener
+    public final void onClick(View view) {
+        FullscreenModal.onCreateView$lambda$5(this.f$0, view);
+    }
+}

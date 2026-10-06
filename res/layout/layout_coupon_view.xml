@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zmaticoo.sdk.utils.weight.CouponView android:id="@id/couponView" android:layout_width="128.0dp" android:layout_height="72.0dp"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

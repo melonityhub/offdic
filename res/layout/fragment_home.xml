@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <fast.dic.dict.views.CloudWordsView android:layout_width="match_parent" android:layout_height="match_parent" />
+    <fast.dic.dict.views.WordOfTheDayView android:id="@id/wod_view" android:layout_width="match_parent" android:layout_height="@dimen/wod_height" android:layout_marginStart="20.0dp" android:layout_marginEnd="20.0dp" />
+    <fast.dic.dict.views.SearchBarView android:id="@id/search_bar_view" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="20.0dp" android:layout_marginEnd="20.0dp" android:transitionName="searchBarView" />
+</FrameLayout>

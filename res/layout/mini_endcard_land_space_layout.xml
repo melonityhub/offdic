@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/endcard_min_card_overlay" android:background="#e6000000" android:focusable="true" android:visibility="visible" android:clickable="true" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:gravity="center_horizontal" android:layout_gravity="center" android:orientation="vertical" android:layout_width="340.0dp" android:layout_height="wrap_content" android:layout_marginLeft="16.0dp" android:layout_marginRight="16.0dp" android:layout_marginHorizontal="16.0dp">
+        <TextView android:textSize="14.0sp" android:textStyle="italic" android:textColor="#e6ffffff" android:ellipsize="end" android:gravity="center" android:id="@id/endcard_min_header_text" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/ad_12dp" android:maxLines="1" android:fontFamily="sans-serif-medium" android:layout_marginStart="@dimen/ad_12dp" android:layout_marginEnd="@dimen/ad_12dp" />
+        <LinearLayout android:orientation="vertical" android:id="@id/endcard_min_card" android:background="@drawable/zmaticoo_shape_white_8" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+                <com.zmaticoo.sdk.utils.weight.RoundedImageView android:id="@id/cta_img" android:layout_width="match_parent" android:layout_height="150.0dp" android:layout_marginLeft="@dimen/ad_12dp" android:layout_marginTop="12.0dp" android:layout_marginRight="@dimen/ad_12dp" android:scaleType="centerCrop" />
+                <ImageView android:layout_gravity="end|top" android:id="@id/endcard_min_hero_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@mipmap/endcard_mini_badge" android:contentDescription="@null" />
+            </FrameLayout>
+            <RelativeLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="40.0dp" android:layout_marginTop="13.0dp" android:layout_marginStart="12.0dp">
+                <com.zmaticoo.sdk.utils.weight.RoundedImageView android:id="@id/endcard_min_icon" android:background="@drawable/ed2_icon_dra" android:layout_width="40.0dp" android:layout_height="40.0dp" android:scaleType="centerCrop" />
+                <TextView android:textSize="16.0sp" android:textStyle="bold" android:textColor="#ff141414" android:ellipsize="end" android:id="@id/endcard_min_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="1" android:layout_marginStart="8.0dp" android:layout_marginEnd="8.0dp" android:layout_toEndOf="@id/endcard_min_icon" />
+                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/endcard_min_rating_row" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_marginStart="8.0dp" android:layout_toEndOf="@id/endcard_min_icon">
+                    <ImageView android:layout_width="12.0dp" android:layout_height="12.0dp" android:src="@drawable/zmaticoo_template_ic_star" android:contentDescription="@null" />
+                    <ImageView android:layout_width="12.0dp" android:layout_height="12.0dp" android:src="@drawable/zmaticoo_template_ic_star" android:contentDescription="@null" />
+                    <ImageView android:layout_width="12.0dp" android:layout_height="12.0dp" android:src="@drawable/zmaticoo_template_ic_star" android:contentDescription="@null" />
+                    <ImageView android:layout_width="12.0dp" android:layout_height="12.0dp" android:src="@drawable/zmaticoo_template_ic_star" android:contentDescription="@null" />
+                    <ImageView android:layout_width="12.0dp" android:layout_height="12.0dp" android:src="@drawable/zmaticoo_template_ic_star" android:contentDescription="@null" />
+                    <TextView android:textSize="12.0sp" android:textColor="#ff8c8c8c" android:id="@id/endcard_min_rating_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="150.0dp" android:text="29,815 comments" android:maxLines="1" android:layout_marginStart="@dimen/ad_6dp" />
+                </LinearLayout>
+            </RelativeLayout>
+            <TextView android:textSize="17.0sp" android:textStyle="bold" android:textColor="@android:color/white" android:ellipsize="end" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/endcard_min_cta" android:background="@drawable/endcard_min_cta_bg" android:layout_width="match_parent" android:layout_height="50.0dp" android:layout_margin="12.0dp" android:text="Install" android:maxLines="1" android:textAllCaps="false" />
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView android:layout_gravity="end|top" android:id="@id/endcard_min_close" android:padding="@dimen/ad_4dp" android:visibility="gone" android:layout_width="26.0dp" android:layout_height="24.0dp" android:layout_marginTop="53.0dp" android:src="@mipmap/ic_endcard_mini_close" android:contentDescription="@string/zmaticoo_endcard_min_close_cd" android:layout_marginEnd="18.0dp" />
+    <ImageView android:layout_gravity="end|bottom" android:id="@id/ed_ad_icon" android:layout_width="56.0dp" android:layout_height="10.0dp" android:layout_marginBottom="@dimen/ad_4dp" android:src="@mipmap/zmaticoo_ad_icon" android:layout_marginEnd="@dimen/ad_4dp" />
+</FrameLayout>

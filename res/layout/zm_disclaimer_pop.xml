@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@drawable/zmaticoo_shape_white_8" android:padding="10.0dp" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:id="@id/tvAdvertiserInfo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="200.0dp" />
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/llAbout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14.0dp">
+        <ImageView android:layout_width="20.0dp" android:layout_height="20.0dp" android:src="@mipmap/zmaticoo_about1" />
+        <TextView android:id="@id/tvAboutDesc" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="О рекламодател" android:layout_marginStart="4.0dp" android:layout_marginEnd="4.0dp" />
+        <ImageView android:layout_width="14.0dp" android:layout_height="14.0dp" android:src="@mipmap/zmaticoo_about2" android:scaleType="fitXY" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:id="@id/llCopyLink" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dp">
+        <ImageView android:layout_width="20.0dp" android:layout_height="20.0dp" android:src="@mipmap/zmaticoo_copy_link" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Скопируйте ссылку" android:layout_marginStart="4.0dp" />
+    </LinearLayout>
+</LinearLayout>

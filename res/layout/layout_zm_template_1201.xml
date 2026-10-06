@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@color/black" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/container_video_view" android:background="@color/co_container_video_view_bg" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <FrameLayout android:id="@id/accessory" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="30.0dp" android:layout_above="@id/cta_card" android:layout_marginStart="24.0dp" />
+        <LinearLayout android:orientation="vertical" android:id="@id/cta_card" android:background="@drawable/zmaticoo_template_bg" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/ad_16dp" android:layout_marginTop="@dimen/ad_16dp" android:layout_marginRight="@dimen/ad_16dp" android:layout_marginHorizontal="@dimen/ad_16dp">
+                <com.zmaticoo.sdk.utils.weight.PriceTextView android:id="@id/zm_ad_price" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:textSize="12.0sp" android:textColor="#f90d58" android:ellipsize="end" android:layout_gravity="center_vertical" android:id="@id/zm_ad_save_price" android:background="@drawable/zmaticoo_shape_save_bg" android:paddingLeft="@dimen/ad_4dp" android:paddingTop="@dimen/ad_3dp" android:paddingRight="@dimen/ad_4dp" android:paddingBottom="@dimen/ad_3dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="120.0dp" android:maxLines="1" android:layout_marginStart="@dimen/ad_4dp" android:paddingHorizontal="@dimen/ad_4dp" android:paddingVertical="@dimen/ad_3dp" />
+                <View android:layout_width="0.0dp" android:layout_height="0.0dp" android:layout_weight="1.0" />
+                <TextView android:textSize="12.0sp" android:textColor="#8c8c8c" android:ellipsize="end" android:layout_gravity="bottom" android:id="@id/zm_ad_sold_count_display" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="150.0dp" android:maxLines="1" />
+            </LinearLayout>
+            <TextView android:textSize="16.0sp" android:textColor="@color/co_cta_ed1" android:ellipsize="end" android:id="@id/zm_template_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/ad_16dp" android:layout_marginTop="8.0dp" android:layout_marginRight="@dimen/ad_16dp" android:maxLines="1" android:layout_marginHorizontal="@dimen/ad_16dp" />
+            <TextView android:textSize="16.0sp" android:textStyle="bold" android:textColor="#ffffff" android:ellipsize="end" android:gravity="center" android:id="@id/cta_button" android:background="@drawable/zmaticoo_button_bg" android:paddingLeft="@dimen/ad_24dp" android:paddingRight="@dimen/ad_24dp" android:layout_width="match_parent" android:layout_height="48.0dp" android:layout_marginLeft="@dimen/ad_30dp" android:layout_marginTop="@dimen/ad_12dp" android:layout_marginRight="@dimen/ad_30dp" android:layout_marginBottom="@dimen/ad_16dp" android:maxLines="1" android:layout_marginHorizontal="@dimen/ad_30dp" android:paddingHorizontal="@dimen/ad_24dp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <include layout="@layout/layout_zm_template_common_header" />
+    <include android:layout_gravity="bottom" android:layout_width="match_parent" android:layout_height="2.0dp" layout="@layout/layout_zm_template_common_progress" />
+    <include layout="@layout/layout_zm_template_common_watermark" />
+</FrameLayout>

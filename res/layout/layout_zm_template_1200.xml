@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@color/black" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/container_video_view" android:background="@color/co_container_video_view_bg" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <include layout="@layout/layout_zm_template_common_header_disclaimer" />
+    <LinearLayout android:layout_gravity="bottom" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <ProgressBar android:id="@id/video_progress" android:layout_width="match_parent" android:layout_height="2.0dp" android:max="100" android:progress="0" android:progressDrawable="@drawable/zm_video_progress_bar" style="?android:progressBarStyleHorizontal" />
+        <include layout="@layout/container_video_bottom_has_app" />
+        <com.zmaticoo.sdk.base.common.view.DisclaimerView android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@id/disclaimerLayout" android:background="@color/white" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    </LinearLayout>
+    <include layout="@layout/layout_zm_template_common_watermark" />
+</FrameLayout>

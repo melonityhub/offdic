@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" app:cardBackgroundColor="?tabBarBackground" app:cardCornerRadius="8.0dp" app:cardElevation="8.0dp"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:padding="24.0dp" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <ProgressBar android:layout_gravity="center_horizontal" android:id="@id/progress_bar" android:layout_width="48.0dp" android:layout_height="48.0dp" android:indeterminateTint="?colorPrimary" style="?android:progressBarStyle" />
+        <TextView android:textSize="16.0sp" android:textStyle="bold" android:textColor="?colorOnBackground" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/progress_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16.0dp" android:text="@string/please_wait" android:fontFamily="@font/iransansxregular" />
+        <TextView android:textSize="14.0sp" android:textColor="?colorOnBackground" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/progress_message" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dp" android:text="@string/preparing_data" android:fontFamily="@font/iransansxregular" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

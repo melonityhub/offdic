@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/container_video_view" android:background="@color/co_container_video_view_bg" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <LinearLayout android:gravity="center_vertical" android:layout_gravity="end|bottom" android:orientation="horizontal" android:id="@id/cta_card" android:background="@drawable/zmaticoo_layer_1209_car_bg" android:layout_width="216.0dp" android:layout_height="80.0dp" android:layout_marginBottom="12.0dp" android:layout_marginEnd="12.0dp">
+        <com.zmaticoo.sdk.utils.weight.RoundedImageView android:id="@id/app_icon" android:layout_width="56.0dp" android:layout_height="56.0dp" android:contentDescription="@null" android:layout_marginStart="12.0dp" />
+        <TextView android:textSize="16.0sp" android:textStyle="bold" android:textColor="#ffffff" android:ellipsize="end" android:gravity="center" android:id="@id/cta_button" android:background="@drawable/zmaticoo_button_bg" android:layout_width="124.0dp" android:layout_height="56.0dp" android:text="Install" android:maxLines="1" android:layout_marginStart="12.0dp" />
+    </LinearLayout>
+    <include layout="@layout/layout_zm_template_common_header" />
+    <include layout="@layout/layout_zm_template_common_progress_landscape" />
+    <include layout="@layout/layout_zm_template_common_watermark_landscape" />
+</FrameLayout>

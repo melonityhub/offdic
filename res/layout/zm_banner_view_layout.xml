@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/banner_webview_container" android:layout_width="match_parent" android:layout_height="match_parent" android:minHeight="50.0dp" />
+    <LinearLayout android:orientation="horizontal" android:id="@id/banner_top_right_layout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentEnd="true" android:elevation="1.0dp">
+        <ImageView android:id="@id/banner_right_top_logo" android:visibility="visible" android:layout_width="@dimen/ad_12dp" android:layout_height="@dimen/ad_12dp" android:src="@mipmap/zmaticoo_banner_zm_right_top_logo_small" />
+        <ImageView android:id="@id/banner_close" android:visibility="gone" android:layout_width="@dimen/ad_12dp" android:layout_height="@dimen/ad_12dp" android:src="@mipmap/zmaticoo_banner_close_small" android:layout_marginStart="@dimen/ad_5dp" />
+    </LinearLayout>
+    <include layout="@layout/zmaticoo_layout_close_reason_small" />
+    <include layout="@layout/zmaticoo_layout_closed_small" />
+</RelativeLayout>

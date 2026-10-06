@@ -1,0 +1,42 @@
+.class final Lfast/dic/dict/presentation/result_order_modal/ResultOrderAdapter_Factory$InstanceHolder;
+.super Ljava/lang/Object;
+.source "ResultOrderAdapter_Factory.java"
+
+
+# annotations
+.annotation system Ldalvik/annotation/EnclosingClass;
+    value = Lfast/dic/dict/presentation/result_order_modal/ResultOrderAdapter_Factory;
+.end annotation
+
+.annotation system Ldalvik/annotation/InnerClass;
+    accessFlags = 0x1a
+    name = "InstanceHolder"
+.end annotation
+
+
+# static fields
+.field static final INSTANCE:Lfast/dic/dict/presentation/result_order_modal/ResultOrderAdapter_Factory;
+
+
+# direct methods
+.method static constructor <clinit>()V
+    .locals 1
+
+    .line 40
+    new-instance v0, Lfast/dic/dict/presentation/result_order_modal/ResultOrderAdapter_Factory;
+
+    invoke-direct {v0}, Lfast/dic/dict/presentation/result_order_modal/ResultOrderAdapter_Factory;-><init>()V
+
+    sput-object v0, Lfast/dic/dict/presentation/result_order_modal/ResultOrderAdapter_Factory$InstanceHolder;->INSTANCE:Lfast/dic/dict/presentation/result_order_modal/ResultOrderAdapter_Factory;
+
+    return-void
+.end method
+
+.method private constructor <init>()V
+    .locals 0
+
+    .line 39
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method

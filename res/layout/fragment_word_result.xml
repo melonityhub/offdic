@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:tag="layout/fragment_word_result_0" android:background="?tabBarBackground" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar android:id="@id/toolbar_top" android:tag="binding_1" android:background="?header" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="?actionBarSize" android:alpha="1.0" app:contentInsetStart="0.0dp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_scrollFlags="scroll|enterAlways">
+            <TextView android:textSize="16.0sp" android:textColor="@color/white" android:ellipsize="end" android:layout_gravity="center" android:id="@id/toolbar_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="250.0dp" android:text="@string/app_full_name" android:maxLines="1" android:fontFamily="@font/iransansxbold" />
+        </androidx.appcompat.widget.Toolbar>
+        <fast.dic.dict.views.SearchBarView android:id="@id/search_bar_view" android:tag="binding_2" android:layout_width="match_parent" android:layout_height="wrap_content" />
+        <FrameLayout android:id="@id/web_view_container" android:background="?tabBarBackground" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </LinearLayout>
+    <fast.dic.dict.views.CustomProgressbar android:id="@id/loading_spinner" android:tag="binding_3" android:layout_width="match_parent" android:layout_height="match_parent" />
+</FrameLayout>

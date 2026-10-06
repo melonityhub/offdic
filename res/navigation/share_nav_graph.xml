@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/share_nav_graph" app:startDestination="@id/wordResultScreen"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="" android:name="fast.dic.dict.presentation.word_result_screen.WordResultFragment" android:id="@id/wordResultScreen">
+        <argument android:name="listModel" android:defaultValue="@null" app:argType="fast.dic.dict.models.database.ListModel" app:nullable="true" />
+        <argument android:name="fromShare" android:defaultValue="false" app:argType="boolean" />
+        <argument android:name="enableSearchbar" android:defaultValue="false" app:argType="boolean" />
+    </fragment>
+    <fragment android:label="" android:name="fast.dic.dict.fragments.HelpFragment" android:id="@id/helpFragment">
+        <argument android:name="url" app:argType="string" app:nullable="true" />
+        <argument android:name="pageTitle" app:argType="string" app:nullable="true" />
+        <argument android:name="can_redirect" android:defaultValue="false" app:argType="boolean" />
+    </fragment>
+</navigation>

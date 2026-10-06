@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:tag="layout/adapter_sort_layout_0" android:layout_width="match_parent" android:layout_height="80.0dp"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.card.MaterialCardView android:id="@id/row_container_card" android:tag="binding_1" android:background="?tableViewBackground" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_margin="@dimen/margin" app:cardCornerRadius="@dimen/corner_radius">
+        <androidx.constraintlayout.widget.ConstraintLayout android:id="@id/my_words_inside_of_container" android:background="?tabBarBackground" android:layout_width="match_parent" android:layout_height="match_parent">
+            <TextView android:textSize="@dimen/body2_font_size" android:textColor="?labelColor" android:id="@id/language_title_label" android:tag="binding_2" android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/margin" android:layout_marginRight="@dimen/margin" android:fontFamily="@font/iransansxregular" android:layout_marginHorizontal="@dimen/margin" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

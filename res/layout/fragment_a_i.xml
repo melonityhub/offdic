@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:tag="layout/fragment_a_i_0" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <im.delight.android.webview.AdvancedWebView android:id="@id/web_view" android:tag="binding_1" android:background="?tabBarBackground" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <fast.dic.dict.views.CustomProgressbar android:id="@id/loading_spinner" android:tag="binding_2" android:layout_width="match_parent" android:layout_height="match_parent" />
+</FrameLayout>

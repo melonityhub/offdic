@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/rela_main" android:layout_width="@dimen/ad_320dp" android:layout_height="@dimen/ad_50dp"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/banner_video_container" android:layout_width="@dimen/ad_75dp" android:layout_height="@dimen/ad_50dp" android:layout_marginRight="@dimen/ad_3dp" />
+    <RelativeLayout android:id="@id/banner_card_view" android:visibility="visible" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_toRightOf="@id/banner_video_container">
+        <LinearLayout android:orientation="vertical" android:id="@id/text_lea" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_toLeftOf="@id/banner_cta_button">
+            <TextView android:textSize="13.0sp" android:textStyle="bold" android:textColor="@color/co_app_name" android:ellipsize="end" android:id="@id/banner_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Access Now" android:maxEms="15" android:singleLine="true" />
+            <TextView android:textSize="11.0sp" android:textColor="@color/co_end_card1_desc" android:ellipsize="end" android:id="@id/banner_description" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="You can access this now!" android:maxLines="2" android:maxEms="20" />
+        </LinearLayout>
+        <Button android:textSize="10.0sp" android:textColor="@color/white" android:ellipsize="end" android:id="@id/banner_cta_button" android:background="@drawable/banner_button_ba" android:paddingLeft="@dimen/ad_4dp" android:paddingRight="@dimen/ad_4dp" android:focusable="false" android:clickable="false" android:layout_width="@dimen/ad_64dp" android:layout_height="@dimen/ad_26dp" android:layout_marginLeft="@dimen/ad_8dp" android:layout_marginRight="@dimen/ad_8dp" android:text="Install now" android:maxEms="15" android:singleLine="true" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:textAllCaps="false" android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <ImageView android:id="@id/banner_advertisers_choices" android:visibility="gone" android:layout_width="@dimen/ad_12dp" android:layout_height="@dimen/ad_12dp" android:layout_marginRight="@dimen/ad_8dp" android:layout_toLeftOf="@id/banner_ad_label" android:layout_alignParentBottom="true" />
+    <ImageView android:id="@id/banner_ad_label" android:visibility="visible" android:clickable="false" android:layout_width="@dimen/ad_12dp" android:layout_height="@dimen/ad_12dp" android:src="@mipmap/ad_choices" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" />
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentEnd="true">
+        <ImageView android:id="@id/banner_right_top_logo" android:visibility="visible" android:layout_width="@dimen/ad_12dp" android:layout_height="@dimen/ad_12dp" android:src="@mipmap/zmaticoo_banner_zm_right_top_logo_small" />
+        <ImageView android:id="@id/banner_close" android:visibility="gone" android:layout_width="@dimen/ad_12dp" android:layout_height="@dimen/ad_12dp" android:src="@mipmap/zmaticoo_banner_close_small" android:layout_marginStart="@dimen/ad_5dp" />
+    </LinearLayout>
+    <include layout="@layout/zmaticoo_layout_close_reason_small" />
+    <include layout="@layout/zmaticoo_layout_closed_small" />
+</RelativeLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/cta_install_popup_root" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.zmaticoo.sdk.flow.components.video.popup.CtaInstallPopupBubbleLayout android:id="@id/cta_install_popup_content" android:layout_width="210.0dp" android:layout_height="110.0dp">
+        <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10.0dp" android:layout_marginStart="10.0dp" android:layout_marginEnd="10.0dp">
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <com.zmaticoo.sdk.utils.weight.RoundedImageView android:id="@id/popup_app_icon" android:layout_width="40.0dp" android:layout_height="40.0dp" android:scaleType="centerCrop" />
+                <LinearLayout android:orientation="vertical" android:layout_width="140.0dp" android:layout_height="wrap_content" android:layout_marginStart="8.0dp">
+                    <TextView android:textSize="12.0sp" android:textStyle="bold" android:textColor="#141414" android:ellipsize="end" android:id="@id/app_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="1" />
+                    <TextView android:textSize="12.0sp" android:textColor="#8c8c8c" android:ellipsize="end" android:id="@id/app_des" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dp" android:maxLines="1" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView android:textSize="14.0sp" android:textColor="#ffffff" android:ellipsize="end" android:gravity="center" android:id="@id/install_btn" android:background="@drawable/zmaticoo_button_bg" android:paddingLeft="12.0dp" android:paddingRight="12.0dp" android:layout_width="match_parent" android:layout_height="32.0dp" android:layout_marginTop="8.0dp" android:text="Install" android:maxLines="1" android:textAllCaps="false" android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+    </com.zmaticoo.sdk.flow.components.video.popup.CtaInstallPopupBubbleLayout>
+</FrameLayout>

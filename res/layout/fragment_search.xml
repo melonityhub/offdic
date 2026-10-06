@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:tag="layout/fragment_search_0" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fast.dic.dict.views.CloudWordsView android:layout_width="match_parent" android:layout_height="match_parent" />
+    <fast.dic.dict.views.SearchBarView android:id="@id/search_bar_view" android:layout_width="match_parent" android:layout_height="wrap_content" android:transitionName="searchBarView" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/recycler_view" android:tag="binding_1" android:background="?tabBarBackground" android:visibility="visible" android:scrollbars="vertical" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@id/search_bar_view" app:layoutManager="LinearLayoutManager" />
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_gravity="center" android:id="@id/placeholder_no_result" android:background="?tabBarBackground" android:visibility="gone" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginTop="80.0dp">
+        <TextView android:textSize="@dimen/body2_font_size" android:textColor="?labelColor" android:id="@id/placeholder_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fa_search_bar_hint" android:fontFamily="@font/iransansxregular" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toTopOf="parent" />
+        <TextView android:textSize="@dimen/body2_font_size" android:textColor="?labelColor" android:id="@id/placeholder_label_en" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/en_search_bar_hint" android:fontFamily="@font/helveticaneuemedium" app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toBottomOf="@id/placeholder_label" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <fast.dic.dict.views.CustomProgressbar android:id="@id/loading_spinner" android:layout_width="match_parent" android:layout_height="match_parent" android:alpha="0.0" />
+</RelativeLayout>

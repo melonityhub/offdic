@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="@color/black" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/container_video_view" android:background="@color/co_container_video_view_bg" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <FrameLayout android:id="@id/accessory" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="20.0dp" android:layout_above="@id/cta_card" android:layout_alignStart="@id/cta_card" />
+    <RelativeLayout android:id="@id/cta_card" android:background="@drawable/zmaticoo_shape_white_8" android:layout_width="260.0dp" android:layout_height="144.0dp" android:layout_marginBottom="50.0dp" android:layout_alignParentBottom="true" android:layout_marginStart="20.0dp">
+        <com.zmaticoo.sdk.utils.weight.RoundedImageView android:id="@id/templateImage" android:layout_width="72.0dp" android:layout_height="72.0dp" android:layout_marginTop="12.0dp" android:contentDescription="@null" android:layout_marginStart="12.0dp" />
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12.0dp" android:layout_marginStart="12.0dp" android:layout_toEndOf="@id/templateImage">
+            <com.zmaticoo.sdk.utils.weight.PriceTextView android:textSize="14.0sp" android:textColor="#f90d58" android:id="@id/tvPrice" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <com.zmaticoo.sdk.utils.weight.AutofitLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+                <TextView android:textSize="12.0sp" android:textColor="#f90d58" android:ellipsize="end" android:gravity="center" android:id="@id/tvSavePrice" android:background="@drawable/zmaticoo_shape_save_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="120.0dp" android:maxLines="1" android:paddingStart="4.0dp" android:paddingEnd="4.0dp" android:layout_marginStart="4.0dp" />
+            </com.zmaticoo.sdk.utils.weight.AutofitLayout>
+        </LinearLayout>
+        <TextView android:textColor="#141414" android:ellipsize="end" android:id="@id/templateTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:layout_alignBottom="@id/templateImage" android:layout_marginStart="12.0dp" android:layout_toEndOf="@id/templateImage" />
+        <TextView android:textColor="@color/white" android:ellipsize="end" android:gravity="center" android:id="@id/cta_button" android:background="@drawable/zmaticoo_button_bg" android:paddingLeft="@dimen/ad_14dp" android:paddingRight="@dimen/ad_14dp" android:layout_width="match_parent" android:layout_height="32.0dp" android:layout_marginLeft="20.0dp" android:layout_marginRight="20.0dp" android:layout_marginBottom="12.0dp" android:maxLines="1" android:layout_alignParentBottom="true" android:layout_marginHorizontal="20.0dp" android:paddingHorizontal="@dimen/ad_14dp" />
+    </RelativeLayout>
+    <include layout="@layout/layout_zm_template_common_header" />
+    <include android:layout_width="match_parent" android:layout_height="2.0dp" android:layout_alignParentBottom="true" layout="@layout/layout_zm_template_common_progress" />
+    <include layout="@layout/layout_zm_template_common_watermark" />
+</RelativeLayout>

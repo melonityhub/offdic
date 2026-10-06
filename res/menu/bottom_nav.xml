@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="@drawable/selector_icon_search" android:id="@id/homeFragment" android:title="@string/search" />
+    <item android:icon="@drawable/selector_icon_ai" android:id="@id/aiFragment" android:title="@string/ai_tab_title" />
+    <item android:icon="@drawable/selector_icon_favorites" android:id="@id/favoritesFragment" android:title="@string/favorite" />
+    <item android:icon="@drawable/selector_icon_profile" android:id="@id/loginOnboardingFragment" android:title="@string/profile" />
+    <item android:icon="@drawable/selector_icon_more" android:id="@id/moreFragment" android:title="@string/more" />
+</menu>

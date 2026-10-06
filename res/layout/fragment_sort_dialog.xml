@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:tag="layout/fragment_sort_dialog_0" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.appbar.AppBarLayout android:id="@id/app_bar" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <androidx.appcompat.widget.Toolbar android:id="@id/toolbar" android:layout_width="match_parent" android:layout_height="?actionBarSize">
+            <TextView android:textSize="16.0sp" android:textColor="@color/white" android:ellipsize="end" android:layout_gravity="center" android:id="@id/toolbar_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="250.0dp" android:text="@string/sort_by" android:maxLines="1" android:fontFamily="@font/iransansxbold" />
+            <TextView android:textColor="@color/white" android:id="@id/back_toolbar_button" android:tag="binding_1" android:background="?selectableItemBackgroundBorderless" android:padding="0.0dp" android:focusable="true" android:clickable="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="0.0dp" android:text="@string/ok" android:fontFamily="@font/iransansxbold" style="@style/Widget.AppCompat.Button.Small" />
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/sort_rv" android:tag="binding_2" android:paddingTop="@dimen/margin" android:paddingBottom="@dimen/margin" android:scrollbars="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="@dimen/margin" app:layoutManager="LinearLayoutManager" />
+</LinearLayout>

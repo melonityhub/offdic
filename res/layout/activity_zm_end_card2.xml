@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/fra_container" android:background="@color/white" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/template_overlay" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <FrameLayout android:id="@id/view_loading_container" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <include layout="@layout/container_end_card_header" />
+</FrameLayout>

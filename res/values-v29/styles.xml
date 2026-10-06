@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.0</item>
+        <item name="android:forceDarkAllowed">true</item>
+        <item name="boxBackground">@color/white</item>
+        <item name="boxLine">@color/fdGreyLightest</item>
+        <item name="buttonDisabled">@color/fdButtonDisabled</item>
+        <item name="colorAccent">@color/fdPrimary</item>
+        <item name="colorPrimary">@color/fdPrimaryLight</item>
+        <item name="colorPrimaryDark">@color/fdPrimaryDark</item>
+        <item name="descriptionLabelColor">@color/fdGrey</item>
+        <item name="directoryRowColor">@color/white</item>
+        <item name="floatingActionBackground">@color/fdNavBarActive</item>
+        <item name="floatingBackground">@color/fdBlack</item>
+        <item name="formLabel">@color/fdFormLabel</item>
+        <item name="header">@color/fdPrimary</item>
+        <item name="historyBackgroud">@color/fdGreyLightest</item>
+        <item name="infoBoxBackground">@color/fdGrey1Dark</item>
+        <item name="inputBackground">@color/fdGreyLightest</item>
+        <item name="label">@color/black</item>
+        <item name="labelColor">@color/black</item>
+        <item name="labelColorRevert">@color/white</item>
+        <item name="labelSubColor">@color/fdGreyMid</item>
+        <item name="labelSubColorRevert">@color/fdGreyMid</item>
+        <item name="labelTextBackground">@color/fdGreyLightest</item>
+        <item name="labelTextColor">@color/black</item>
+        <item name="labelTitle">@color/fdGrey</item>
+        <item name="link">@color/fdLink</item>
+        <item name="linkDisableLabel">@color/fdGreyMid</item>
+        <item name="notificationBoxBackground">@color/fdBlack</item>
+        <item name="partnersBackground">@color/fdGreyLightest</item>
+        <item name="pricingIconBackground">@color/gray_200</item>
+        <item name="purchaseBackground">@color/fdGreyLightest</item>
+        <item name="purchaseSubHeading">@color/fdPrimary</item>
+        <item name="searchBoxBackground">@color/white</item>
+        <item name="searchBoxBackgroundTop">@color/white</item>
+        <item name="searchBoxBottomBorderBackground">@color/fdGreyLightest</item>
+        <item name="secondaryButton">@color/fdSecondary</item>
+        <item name="secondaryLabel">@color/fdGrey3Dark</item>
+        <item name="segmentedBackgroud">@color/fdGreyMid</item>
+        <item name="segmentedColor">@color/fdGeyLight</item>
+        <item name="selectedTransparentBackground">@color/white_80</item>
+        <item name="selected_duration_number_background">@color/fdGreyLightest</item>
+        <item name="selected_pricing_duration">@color/navy_light_blue</item>
+        <item name="settingsRowBackground">@color/fdGreyLightest</item>
+        <item name="speechCameraBackground">@color/fdBlack</item>
+        <item name="tabBarBackground">@color/white</item>
+        <item name="tabBarDefault">@color/fdPrimary</item>
+        <item name="tabBarSelected">@color/black</item>
+        <item name="tabBarTopBorder">@color/white</item>
+        <item name="tableViewBackground">@color/fdGreyLightest</item>
+        <item name="tableViewBorder">@color/fdGreyMid</item>
+        <item name="tableViewRowBackground">@color/whitish_gray</item>
+        <item name="tableViewRowCounterBackgroundColor">@color/white</item>
+        <item name="tableViewRowIconTintColor">@color/dray_foggy_gray</item>
+        <item name="tableViewRowLockColor">@color/navy_light_blue</item>
+        <item name="tableViewSelectedBackground">@color/fdGrey2Dark</item>
+        <item name="tableViewSpecialRowBackground">@color/high_light_blue</item>
+        <item name="tableViewSpecialRowBorderColor">@color/navy_mid_light_blue</item>
+        <item name="tableViewSpecialRowIconTintColor">@color/colorTransparent</item>
+        <item name="topBackground">@color/fdBlack</item>
+        <item name="translatorRowBackground">@color/black</item>
+        <item name="translatorTransparentBackground">@color/white_90</item>
+        <item name="transparentBackground">@color/white_60</item>
+        <item name="unselected_pricing_duration">@color/gray_200</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="wodContentBackground">@color/fdBlack80</item>
+        <item name="wodHeaderBackground">@color/fdBlack</item>
+        <item name="wordCloudBackground">@color/fdPrimaryBackground</item>
+        <item name="wordCloudColor">@color/fdPrimaryLight</item>
+        <item name="wordCloudColorDark">@color/fdGrey2Dark</item>
+    </style>
+    <style name="Base.Theme.SplashScreen" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+        <item name="isLightTheme">?android:isLightTheme</item>
+    </style>
+    <style name="Base.Theme.SplashScreen.Light" parent="@style/Base.Theme.SplashScreen" />
+    <style name="MonetizationAdsInternal.AdActivity" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+</resources>

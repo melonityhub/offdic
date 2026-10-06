@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/nav_graph" app:startDestination="@id/homeFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/favorite" android:name="fast.dic.dict.presentation.favorite_screen.FavoritesFragment" android:id="@id/favoritesFragment">
+        <action android:id="@id/action_favoritesFragment_to_historyFragment" app:destination="@id/historyFragment" app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_in_left" app:popExitAnim="@anim/slide_out_right" app:popUpToInclusive="false" app:popUpToSaveState="true" app:restoreState="true" />
+        <action android:id="@id/action_favoritesFragment_to_directoryWordsFragment" app:destination="@id/directoryWordsFragment" app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_in_left" app:popExitAnim="@anim/slide_out_right" app:popUpToInclusive="false" app:popUpToSaveState="true" app:restoreState="true" />
+    </fragment>
+    <fragment android:label="@string/profile" android:name="fast.dic.dict.presentation.profile_screen.ProfileFragment" android:id="@id/profileFragment" />
+    <dialog android:label="@null" android:name="fast.dic.dict.presentation.fullscreen_modal.FullscreenModal" android:id="@id/fullscreenModal" />
+    <fragment android:label="@string/profile" android:name="fast.dic.dict.presentation.login_onboarding_screen.LoginOnBoardingFragment" android:id="@id/loginOnboardingFragment" />
+    <fragment android:label="@string/more" android:name="fast.dic.dict.fragments.MoreFragment" android:id="@id/moreFragment" />
+    <fragment android:label="@null" android:name="fast.dic.dict.fragments.MoreInnerFragment" android:id="@id/moreInnerFragment">
+        <argument android:name="page" app:argType="fast.dic.dict.fragments.MorePagesEnum" />
+    </fragment>
+    <fragment android:label="@string/app_full_name" android:name="fast.dic.dict.fragments.SearchFragment" android:id="@id/searchFragment">
+        <action android:id="@id/action_searchFragment_to_profileFragment" app:destination="@id/profileFragment" app:enterAnim="@anim/slide_in_up" app:exitAnim="@anim/slide_out_down" app:launchSingleTop="false" app:popEnterAnim="@anim/slide_in_up" app:popExitAnim="@anim/slide_out_down" app:popUpTo="@id/profileFragment" app:popUpToInclusive="true" app:popUpToSaveState="true" app:restoreState="true" />
+        <action android:id="@id/action_searchFragment_to_cameraFragment" app:destination="@id/cameraFragment" app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_in_left" app:popExitAnim="@anim/slide_out_right" app:popUpToInclusive="false" app:popUpToSaveState="true" app:restoreState="true" />
+        <action android:id="@id/action_searchFragment_to_voiceRecognitionFragment" app:destination="@id/voiceRecognitionFragment" />
+        <argument android:name="word" android:defaultValue="@null" app:argType="string" app:nullable="true" />
+        <argument android:name="fromHistory" android:defaultValue="false" app:argType="boolean" />
+    </fragment>
+    <dialog android:label="@string/app_full_name" android:name="fast.dic.dict.presentation.word_result_screen.WordResultFragment" android:id="@id/wordResultModal">
+        <argument android:name="listModel" android:defaultValue="@null" app:argType="fast.dic.dict.models.database.ListModel" app:nullable="true" />
+        <argument android:name="fromShare" android:defaultValue="false" app:argType="boolean" />
+        <argument android:name="enableSearchbar" android:defaultValue="false" app:argType="boolean" />
+    </dialog>
+    <fragment android:label="@string/app_full_name" android:name="fast.dic.dict.presentation.word_result_screen.WordResultFragment" android:id="@id/wordResultScreen">
+        <argument android:name="listModel" android:defaultValue="@null" app:argType="fast.dic.dict.models.database.ListModel" app:nullable="true" />
+        <argument android:name="fromShare" android:defaultValue="false" app:argType="boolean" />
+        <argument android:name="enableSearchbar" android:defaultValue="false" app:argType="boolean" />
+    </fragment>
+    <fragment android:label="@string/history_actionbar_title" android:name="fast.dic.dict.presentation.history_screen.HistoryFragment" android:id="@id/historyFragment" />
+    <fragment android:label="" android:name="fast.dic.dict.presentation.favorite_folders_screen.DirectoryWordsFragment" android:id="@id/directoryWordsFragment">
+        <argument android:name="documentId" app:argType="string" />
+        <argument android:name="documentName" app:argType="string" />
+    </fragment>
+    <fragment android:label="" android:name="fast.dic.dict.presentation.login_screen.LoginSignupFragment" android:id="@id/loginSignupFragment" />
+    <dialog android:label="" android:name="fast.dic.dict.presentation.login_screen.LoginSignupFragment" android:id="@id/loginSignupFragmentDialog" />
+    <fragment android:label="" android:name="fast.dic.dict.presentation.forget_password_screen.ForgetPasswordFragment" android:id="@id/forgetPasswordFragment" />
+    <dialog android:label="" android:name="fast.dic.dict.presentation.forget_password_screen.ForgetPasswordFragment" android:id="@id/forgetPasswordFragmentDialog" />
+    <fragment android:label="" android:name="fast.dic.dict.presentation.enter_password_screen.EnterPasswordFragment" android:id="@id/enterPasswordFragment">
+        <argument android:name="email" app:argType="string" />
+    </fragment>
+    <dialog android:label="" android:name="fast.dic.dict.presentation.enter_password_screen.EnterPasswordFragment" android:id="@id/enterPasswordFragmentDialog">
+        <argument android:name="email" app:argType="string" />
+    </dialog>
+    <fragment android:label="" android:name="fast.dic.dict.presentation.registration_form_screen.RegistrationFormFragment" android:id="@id/registrationFormFragment">
+        <argument android:name="email" app:argType="string" />
+    </fragment>
+    <dialog android:label="" android:name="fast.dic.dict.presentation.registration_form_screen.RegistrationFormFragment" android:id="@id/registrationFormFragmentDialog">
+        <argument android:name="email" app:argType="string" />
+    </dialog>
+    <fragment android:label="" android:name="fast.dic.dict.presentation.finish_registration_screen.FinishRegistrationFragment" android:id="@id/finishRegistrationFragment" />
+    <dialog android:label="" android:name="fast.dic.dict.presentation.finish_registration_screen.FinishRegistrationFragment" android:id="@id/finishRegistrationFragmentDialog" />
+    <fragment android:label="@string/edit_user_information" android:name="fast.dic.dict.fragments.UpdateProfileFragment" android:id="@id/updateProfileFragment" />
+    <fragment android:label="@string/PurchaseHistoryText" android:name="fast.dic.dict.fragments.TransactionHistoryFragment" android:id="@id/transactionHistoryFragment" />
+    <fragment android:label="" android:name="fast.dic.dict.fragments.HelpFragment" android:id="@id/helpFragment">
+        <argument android:name="url" app:argType="string" app:nullable="true" />
+        <argument android:name="pageTitle" app:argType="string" app:nullable="true" />
+        <argument android:name="can_redirect" android:defaultValue="false" app:argType="boolean" />
+    </fragment>
+    <fragment android:label="" android:name="fast.dic.dict.presentation.wod_history_screen.WodHistoryFragment" android:id="@id/wodHistoryFragment">
+        <argument android:name="year" app:argType="string" app:nullable="false" />
+    </fragment>
+    <fragment android:label="@string/history_of_word_of_the_day" android:name="fast.dic.dict.presentation.wod_year_history_screen.WodYearHistoryFragment" android:id="@id/wodYearHistoryFragment" />
+    <fragment android:label="@string/SettingsMenu" android:name="fast.dic.dict.fragments.SettingFragment" android:id="@id/settingFragment">
+        <action android:id="@id/action_settingFragment_to_languageFragment" app:destination="@id/languageFragment" app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_in_left" app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment android:label="@string/change_language" android:name="fast.dic.dict.fragments.ChooseLanguageFragment" android:id="@id/languageFragment" />
+    <fragment android:label="" android:name="fast.dic.dict.fragments.onboardings.LanguageOnBoardingFragment" android:id="@id/languageOnBoardingFragment">
+        <action android:id="@id/action_languageOnBoardingFragment_to_pushNotificationOnBoardingFragment" app:destination="@id/pushNotificationOnBoardingFragment" app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_in_left" app:popExitAnim="@anim/slide_out_right" app:popUpToSaveState="true" app:restoreState="true" />
+        <action android:id="@id/action_languageOnBoardingFragment_to_advertisementOnBoardingFragment" app:destination="@id/advertisementOnBoardingFragment" app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_in_left" app:popExitAnim="@anim/slide_out_right" app:popUpToSaveState="true" app:restoreState="true" />
+    </fragment>
+    <fragment android:label="" android:name="fast.dic.dict.fragments.onboardings.PushNotificationOnBoardingFragment" android:id="@id/pushNotificationOnBoardingFragment">
+        <action android:id="@id/action_pushNotificationOnBoardingFragment_to_advertisementOnboardingFragment" app:destination="@id/advertisementOnBoardingFragment" app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_in_left" app:popExitAnim="@anim/slide_out_right" app:popUpToSaveState="true" app:restoreState="true" />
+    </fragment>
+    <fragment android:label="" android:name="fast.dic.dict.fragments.onboardings.AdvertisementOnBoardingFragment" android:id="@id/advertisementOnBoardingFragment" />
+    <fragment android:label="" android:name="fast.dic.dict.fragments.TextRecognitionTranslatorFragment" android:id="@id/textRecognitionTranslatorFragment">
+        <deepLink android:id="@id/deepLink" app:uri="fastdic://text_rec" />
+    </fragment>
+    <fragment android:label="" android:name="fast.dic.dict.fragments.CameraFragment" android:id="@id/cameraFragment" />
+    <dialog android:label="" android:name="fast.dic.dict.fragments.onboardings.CameraPermissionFragment" android:id="@id/cameraPermissionFragment" />
+    <dialog android:label="" android:name="fast.dic.dict.fragments.onboardings.MicrophonePermissionFragment" android:id="@id/microphonePermissionFragment" />
+    <dialog android:label="fragment_voice_recognition" android:name="fast.dic.dict.fragments.VoiceRecognitionFragment" android:id="@id/voiceRecognitionFragment" />
+    <fragment android:label="@string/app_full_name" android:name="fast.dic.dict.fragments.HomeFragment" android:id="@id/homeFragment">
+        <action android:id="@id/action_homeFragment_to_searchFragment" app:destination="@id/searchFragment" />
+        <argument android:name="word" android:defaultValue="@null" app:argType="string" app:nullable="true" />
+    </fragment>
+    <fragment android:label="@string/compare_fast_dictionary_features" android:name="fast.dic.dict.fragments.onboardings.ProPlanRequiredFragment" android:id="@id/proPlanRequiredFragment" />
+    <fragment android:label="@string/compare_fast_dictionary_features" android:name="fast.dic.dict.presentation.pricing_screen.PricingFragment" android:id="@id/newPricingFragment">
+        <action android:id="@id/action_newPricingFragment_to_paymentMethodFragment" app:destination="@id/paymentMethodFragment" />
+    </fragment>
+    <fragment android:label="" android:name="fast.dic.dict.PaymentMethodFragment" android:id="@id/paymentMethodFragment">
+        <argument android:name="planType" android:defaultValue="REMOVE_ADS" app:argType="fast.dic.dict.models.PlanType" />
+        <argument android:name="plan" app:argType="fast.dic.dict.domain.entity.pricing.Plan" app:nullable="true" />
+        <argument android:name="time" android:defaultValue="ONE_YEAR" app:argType="fast.dic.dict.domain.entity.ProSubscriptionTime" />
+    </fragment>
+    <dialog android:label="" android:name="fast.dic.dict.presentation.logout_screen.LogoutFragment" android:id="@id/logoutFragment" />
+    <dialog android:label="" android:name="fast.dic.dict.presentation.sort_screen.SortDialog" android:id="@id/sortDialog">
+        <argument android:name="items" app:argType="string[]" />
+        <argument android:name="selectedItem" android:defaultValue="@null" app:argType="string" app:nullable="true" />
+        <argument android:name="selectedIndex" android:defaultValue="-1" app:argType="integer" />
+    </dialog>
+    <dialog android:label="" android:name="fast.dic.dict.presentation.result_order_modal.ResultOrderModalFragment" android:id="@id/resultOrderModalFragment">
+        <argument android:name="forEnglish" android:defaultValue="true" app:argType="boolean" />
+    </dialog>
+    <fragment android:label="@string/ai_title" android:name="fast.dic.dict.presentation.ai_screen.AIFragment" android:id="@id/aiFragment">
+        <argument android:name="favoriteId" android:defaultValue="@null" app:argType="string" app:nullable="true" />
+    </fragment>
+    <fragment android:label="@string/word_category_title" android:name="fast.dic.dict.presentation.categories_screen.CategoriesFragment" android:id="@id/categoriesFragment" />
+    <fragment android:label="" android:name="fast.dic.dict.presentation.word_category_screen.WordCategoryFragment" android:id="@id/wordCategoryFragment">
+        <argument android:name="category" app:argType="fast.dic.dict.models.WordCategoryModel" />
+    </fragment>
+</navigation>

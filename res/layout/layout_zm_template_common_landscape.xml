@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/layout_zm_template_common_header" />
+    <include layout="@layout/layout_zm_template_common_progress_landscape" />
+    <include layout="@layout/layout_zm_template_common_disclaimer_landscape" />
+    <include layout="@layout/layout_zm_template_common_watermark_landscape" />
+</merge>

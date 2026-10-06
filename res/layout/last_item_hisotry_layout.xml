@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:tag="layout/last_item_hisotry_layout_0" android:background="?tableViewBackground" android:layout_width="match_parent" android:layout_height="60.0dp"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="@dimen/body1_font_size" android:textColor="?labelColor" android:id="@id/end_of_data_view_label" android:visibility="visible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/end_of_history_words" android:fontFamily="@font/iransansxregular" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

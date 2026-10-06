@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:id="@id/toolbar_top" android:background="?header" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="?actionBarSize" app:contentInsetStart="0.0dp" app:layout_scrollFlags="scroll|enterAlways">
+        <TextView android:textSize="16.0sp" android:textColor="@color/white" android:ellipsize="end" android:layout_gravity="center" android:id="@id/toolbar_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="250.0dp" android:maxLines="1" android:fontFamily="@font/iransansxbold" />
+        <Button android:textColor="@color/white" android:id="@id/left_toolbar_button" android:background="?selectableItemBackgroundBorderless" android:focusable="true" android:visibility="visible" android:clickable="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableLeft="@drawable/back_icon" android:fontFamily="@font/iransansxregular" android:backgroundTint="@color/colorTransparent" app:tint="@drawable/button_enable_selector" style="@style/Widget.MaterialComponents.TimePicker.ImageButton" />
+        <ImageButton android:layout_gravity="end" android:id="@id/right_toolbar_button" android:background="?selectableItemBackgroundBorderless" android:padding="@dimen/margin" android:focusable="true" android:visibility="visible" android:clickable="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="@dimen/margin" android:src="@drawable/delete_icon" android:backgroundTint="@color/colorTransparent" app:tint="@drawable/button_enable_selector" />
+    </androidx.appcompat.widget.Toolbar>
+</FrameLayout>
