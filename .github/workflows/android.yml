@@ -42,7 +42,7 @@ jobs:
             python3 tools/annotate_build.py gradle-build.log
           fi
           exit "$result"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: build-results
@@ -57,7 +57,7 @@ jobs:
           unzip -q artifacts/offdic-standalone.zip -d "$RUNNER_TEMP/independent"
           cd "$RUNNER_TEMP/independent/offdic-standalone"
           ./gradlew :app:assembleDebug --console=plain
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: offdic-standalone
           path: artifacts/offdic-standalone.zip
@@ -85,7 +85,7 @@ jobs:
       - name: Annotate device test failures
         if: always()
         run: python3 tools/annotate_device_tests.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: android-test-reports

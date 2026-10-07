@@ -114,12 +114,18 @@ class LanguageToolsActivity : Activity() {
         val prompt = input.text.toString().trim()
         if (prompt.isEmpty()) { input.error = "متن وارد کنید"; return }
         val host = runCatching { AiClient.validateEndpoint(endpoint).host }.getOrElse { status.text = it.localizedMessage; return }
+        // Keep endpoint and credentials in one consent snapshot. Another settings activity
+        // must not change the key after consent and send it to an older endpoint.
+        val credential = runCatching { AiCredentials(applicationContext).load() }.getOrElse {
+            status.text = "کلید ذخیره‌شده قابل خواندن نیست؛ آن را در تنظیمات جایگزین یا حذف کنید"
+            return
+        }
         AlertDialog.Builder(this).setTitle("ارسال متن به $host؟")
             .setMessage("متن ورودی به این سرویس ارسال خواهد شد. هزینه و سیاست حریم خصوصی سرویس مستقل از برنامه است.")
             .setNegativeButton("لغو", null).setPositiveButton("ارسال") { _, _ ->
                 cancel()
                 val client = AiClient().also { ai = it }
-                launch("در انتظار پاسخ AI…", { client.ask(config, prompt, AiCredentials(applicationContext).load()) }) { output.text = it }
+                launch("در انتظار پاسخ AI…", { client.ask(config, prompt, credential) }) { output.text = it }
             }.show()
     }
 

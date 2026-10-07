@@ -1,6 +1,8 @@
 # Offdic — بازنویسی اندروید با Kotlin
 
-**وضعیت: مرحلهٔ دوم؛ OCR، ترجمه، ویجت و اتصال AI اضافه شده‌اند. هنوز روی اندروید بیلد/اجرا نشده و همسان صددرصدی تأیید نشده است.**
+**وضعیت: بیلد APK، lint، بیلد خروجی مستقل و تست emulator API 35 در CI موفق شدند. نسخهٔ مستقل و تنظیمات کامل API اضافه شده‌اند؛ همسانی صددرصدی با اپ اصلی همچنان تأیید نشده است.**
+
+[گزارش رفع خطا و بیلد واقعی](docs/BUILD_VERIFICATION_FA.md) · [تنظیمات API](docs/AI_SETTINGS_FA.md) · [خروجی مستقل](docs/STANDALONE_FA.md)
 
 مخزن اولیه خروجی دیکامپایل اپ است، نه سورس قابل بیلد. پروژهٔ مستقل Kotlin در `app/` اضافه شده و فایل‌های مرجع اصلی دست‌نخورده مانده‌اند. ماژول جدید تبلیغات، پرداخت، حساب اجباری یا قفل اشتراک ندارد. امکاناتی که هنوز بازنویسی نشده‌اند، با حذف قفل اشتراک خودبه‌خود پیاده‌سازی نمی‌شوند.
 
@@ -29,7 +31,7 @@ app/src/main/assets/databases/fastdic_plain.sqlite
 - دوربین/انتخاب تصویر و OCR لاتین با پیش‌نمایش، انتخاب بلوک و بزرگ‌نمایی.
 - ترجمهٔ متن انگلیسی/فارسی با ML Kit؛ آفلاین پس از دانلود اولیهٔ مدل.
 - واژهٔ روز محلی و ویجت قابل resize با Worker به‌روزرسانی.
-- کلاینت AI با HTTPS، توکن رمز‌شده و gateway پایتون؛ نیازمند تنظیم سرور و مدل واقعی.
+- تنظیمات AI/API برای Gateway و OpenAI-compatible Chat Completions: endpoint، مدل، کلید رمز‌شده، دستور سیستم، timeout و آزمایش اتصال. نیازمند تنظیم سرویس/مدل واقعی.
 
 راهنمای قابلیت‌های جدید، راه‌اندازی AI و محدودیت‌ها: [FEATURES_FA.md](docs/FEATURES_FA.md). OCR خط فارسی ندارد و واژهٔ روز به آرشیو سرور اصلی متصل نیست.
 
@@ -44,22 +46,26 @@ app/src/main/assets/databases/fastdic_plain.sqlite
 - Android SDK Platform 35؛ دسترسی به Google Maven و Maven Central
 - حداقل اندروید دستگاه: API 26
 
-در محیطی که Gradle نصب است:
+با JDK 17 و SDK تنظیم‌شده، از Wrapper همراه پروژه استفاده کنید:
 
 ```sh
-gradle :app:assembleDebug :app:lintDebug
-gradle :app:connectedDebugAndroidTest  # با emulator یا دستگاه متصل
+./gradlew :app:assembleDebug :app:lintDebug
+./gradlew :app:connectedDebugAndroidTest  # با emulator یا دستگاه متصل
 ```
 
 فایل خروجی مورد انتظار: `app/build/outputs/apk/debug/app-debug.apk`.
 
-**Gradle Wrapper هنوز در مخزن نیست**؛ دانلود آن در محیط توسعهٔ این تغییر ممکن نشد. برای ایجاد Wrapper استاندارد پس از نصب Gradle 8.9:
+Wrapper استاندارد Gradle 8.9 همراه پروژه است و checksum توزیع را بررسی می‌کند. در ویندوز از `gradlew.bat` استفاده کنید؛ نصب جداگانهٔ Gradle لازم نیست.
+
+Workflow در `.github/workflows/android.yml` بیلد، lint، تست emulator و بیلد نسخهٔ مستقل را اجرا می‌کند. اجرای موفق مشخص در [گزارش بررسی](docs/BUILD_VERIFICATION_FA.md) لینک شده است.
+
+## پروژهٔ مستقل بدون سورس اصلی
 
 ```sh
-gradle wrapper --gradle-version 8.9 --distribution-type bin
+python3 tools/export_standalone.py
 ```
 
-Workflow در `.github/workflows/android.yml` بیلد، کامپایل تست اندروید و lint را تعریف می‌کند؛ هنوز اجرا/سبز بودن آن تأیید نشده است.
+فایل `artifacts/offdic-standalone.zip` را در پوشهٔ خالی دیگری استخراج کنید. هیچ پوشهٔ Java/Smali مرجع، `.git`، خروجی build یا دیتابیس کامل داخل آن نیست. نمونهٔ دیتابیس و تمام ورودی‌های لازم برای بیلد و تست همراه آن است. توضیح شاخه/مخزن مستقل: [STANDALONE_FA.md](docs/STANDALONE_FA.md).
 
 ## بررسی‌های قابل اجرا بدون Android SDK
 
@@ -67,9 +73,10 @@ Workflow در `.github/workflows/android.yml` بیلد، کامپایل تست �
 python3 tools/audit_original.py
 python3 tools/test_contract.py
 python3 tools/test_gateway.py
+python3 tools/test_standalone.py
 ```
 
-۱۴ آزمون میزبان پاس شده‌اند (۹ قرارداد/منابع و ۵ gateway با upstream ساختگی در تست). این آزمون‌ها جای کامپایل Kotlin، تست دستگاه، بررسی کارایی دیتابیس کامل یا مقایسهٔ تصویری را نمی‌گیرند. [گزارش بررسی](docs/REVIEW_FA.md).
+۱۶ آزمون میزبان پاس شده‌اند (۱۰ قرارداد/منابع، ۵ gateway با upstream ساختگی و ۱ خروجی مستقل). این آزمون‌ها جای کامپایل Kotlin، تست دستگاه، بررسی کارایی دیتابیس کامل یا مقایسهٔ تصویری را نمی‌گیرند. [گزارش بررسی](docs/REVIEW_FA.md).
 
 ## ساختار
 
