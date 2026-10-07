@@ -1,6 +1,8 @@
 name: Kotlin Android checks
 on:
   push:
+    # The release job force-pushes an artifact-only shuttle branch; it must not burn CI minutes.
+    branches-ignore: [drive-artifacts]
   pull_request:
   workflow_dispatch:
 permissions:
@@ -42,13 +44,29 @@ jobs:
             python3 tools/annotate_build.py gradle-build.log
           fi
           exit "$result"
+      # The release pipeline only runs after a merge; compiling the exact release variant here
+      # means a broken release configuration fails on the pull request instead of on main.
+      - name: Assemble the release variant used by the release workflow
+        shell: bash
+        run: |
+          set +e
+          ./gradlew :app:assembleRelease -PappVersionName=ci -PappVersionCode=1 -PabiSplits=true \
+            --console=plain --stacktrace 2>&1 | tee gradle-release.log
+          result=${PIPESTATUS[0]}
+          if [ "$result" -ne 0 ]; then
+            python3 tools/annotate_build.py gradle-release.log
+          fi
+          exit "$result"
       - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: build-results
+          # Release APKs are ~40 MB each; the release log is enough to diagnose a failure here.
           path: |
             gradle-build.log
-            app/build/outputs/apk/
+            gradle-release.log
+            app/build/outputs/apk/debug/
+            app/build/outputs/apk/androidTest/
             app/build/reports/
       - name: Export standalone project
         run: python3 tools/export_standalone.py

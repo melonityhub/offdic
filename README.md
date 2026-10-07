@@ -2,7 +2,7 @@
 
 **وضعیت: بیلد APK، lint، بیلد خروجی مستقل و تست emulator API 35 در CI موفق شدند. نسخهٔ مستقل و تنظیمات کامل API اضافه شده‌اند؛ همسانی صددرصدی با اپ اصلی همچنان تأیید نشده است.**
 
-[گزارش رفع خطا و بیلد واقعی](docs/BUILD_VERIFICATION_FA.md) · [تنظیمات API](docs/AI_SETTINGS_FA.md) · [خروجی مستقل](docs/STANDALONE_FA.md)
+[گزارش رفع خطا و بیلد واقعی](docs/BUILD_VERIFICATION_FA.md) · [ریلیز خودکار APK](docs/RELEASE_FA.md) · [تنظیمات API](docs/AI_SETTINGS_FA.md) · [خروجی مستقل](docs/STANDALONE_FA.md)
 
 مخزن اولیه خروجی دیکامپایل اپ است، نه سورس قابل بیلد. پروژهٔ مستقل Kotlin در `app/` اضافه شده و فایل‌های مرجع اصلی دست‌نخورده مانده‌اند. ماژول جدید تبلیغات، پرداخت، حساب اجباری یا قفل اشتراک ندارد. امکاناتی که هنوز بازنویسی نشده‌اند، با حذف قفل اشتراک خودبه‌خود پیاده‌سازی نمی‌شوند.
 
@@ -55,9 +55,18 @@ app/src/main/assets/databases/fastdic_plain.sqlite
 
 فایل خروجی مورد انتظار: `app/build/outputs/apk/debug/app-debug.apk`.
 
+برای ساختن همان APKهای ریلیز روی سیستم خودتان:
+
+```sh
+./gradlew :app:assembleRelease -PappVersionName=1.0.5 -PappVersionCode=1000005 -PabiSplits=true
+# app/build/outputs/apk/release/app-<abi>-release.apk
+```
+
 Wrapper استاندارد Gradle 8.9 همراه پروژه است و checksum توزیع را بررسی می‌کند. در ویندوز از `gradlew.bat` استفاده کنید؛ نصب جداگانهٔ Gradle لازم نیست.
 
-Workflow در `.github/workflows/android.yml` بیلد، lint، تست emulator و بیلد نسخهٔ مستقل را اجرا می‌کند. اجرای موفق مشخص در [گزارش بررسی](docs/BUILD_VERIFICATION_FA.md) لینک شده است.
+Workflow در `.github/workflows/android.yml` بیلد، lint، تست emulator و بیلد نسخهٔ مستقل را اجرا می‌کند. بیلد نسخهٔ release (همان ورژنی که ریلیز می‌شود) هم در همین ورک‌فلو کامپایل می‌شود تا خطای ریلیز زودتر از مرج دیده شود. اجرای موفق مشخص در [گزارش بررسی](docs/BUILD_VERIFICATION_FA.md) لینک شده است.
+
+**ریلیز خودکار:** با هر مرج به `main`، ورک‌فلوی `.github/workflows/release.yml` نسخهٔ `1.0.<شمارهٔ اجرا>` را می‌سازد، چهار APK (arm64-v8a، armeabi-v7a، x86_64 و یونیورسال)، فایل `SHA256SUMS` و `offdic-standalone.zip` را ضمیمهٔ Release می‌کند و نسخهٔ arm64 را برای آپلود در گوگل درایو روی برنچ واسط `drive-artifacts` می‌گذارد. جزئیات و روش امضا با کلید اختصاصی: [docs/RELEASE_FA.md](docs/RELEASE_FA.md).
 
 ## پروژهٔ مستقل بدون سورس اصلی
 

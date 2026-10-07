@@ -181,6 +181,48 @@ class ContractTest(unittest.TestCase):
         self.assertIn('Base64.encodeToString', assets)
         self.assertIn('"data:${mime(path)};base64,"', assets)
 
+    def test_release_pipeline_builds_and_publishes_split_apks(self):
+        """GitHub Actions is the only builder for the app, so the release contract stays explicit.
+
+        Every push to main cuts a release: version 1.0.<run number>, one APK per ABI plus a
+        universal one, checksums, the standalone source ZIP, and the arm64 APK on the shuttle
+        branch that the Drive mirror reads. A local build must keep working without any of it.
+        """
+        release = (ROOT / '.github/workflows/release.yml').read_text()
+        self.assertIn('branches: [main]', release)
+        self.assertIn('contents: write', release)
+        self.assertIn('workflow_dispatch', release)
+        self.assertIn('assembleRelease', release)
+        for flag in ('-PappVersionName=', '-PappVersionCode=', '-PabiSplits=true'):
+            self.assertIn(flag, release)
+        for abi in ('arm64-v8a', 'armeabi-v7a', 'x86_64', 'universal'):
+            self.assertIn(abi, release)
+        self.assertIn('sha256sum', release)
+        self.assertIn('gh release create', release)
+        self.assertIn('--generate-notes', release)
+        self.assertIn('export_standalone.py', release)
+        self.assertIn('drive-artifacts', release)
+        self.assertIn('offdic-${version}-arm64-v8a.apk', release)
+        # The shuttle branch must not trigger the checks workflow, and the checks workflow must
+        # never try to publish anything.
+        checks = (ROOT / '.github/workflows/android.yml').read_text()
+        self.assertIn('branches-ignore: [drive-artifacts]', checks)
+        self.assertNotIn('gh release create', checks)
+        # The pull-request build compiles the very variant the release workflow packages.
+        self.assertIn(':app:assembleRelease -PappVersionName=ci -PappVersionCode=1 -PabiSplits=true', checks)
+        gradle = (ROOT / 'app/build.gradle.kts').read_text()
+        self.assertIn('providers.gradleProperty("appVersionName")', gradle)
+        self.assertIn('providers.gradleProperty("appVersionCode")', gradle)
+        self.assertIn('providers.gradleProperty("abiSplits")', gradle)
+        self.assertIn('isUniversalApk = true', gradle)
+        self.assertIn('signingConfigs.getByName("debug")', gradle)
+        self.assertIn('OFFDIC_KEYSTORE_FILE', gradle)
+        # The exported standalone project must come with the release pipeline documentation.
+        exporter = (ROOT / 'tools/export_standalone.py').read_text()
+        self.assertIn("'.github/workflows/release.yml'", exporter)
+        self.assertIn("'docs/RELEASE_FA.md'", exporter)
+        self.assertTrue((ROOT / 'docs/RELEASE_FA.md').is_file())
+
     def test_word_page_falls_back_and_shows_previews(self):
         activity = (KOTLIN / 'MainActivity.kt').read_text()
         # A WebView failure must never hide the translation.

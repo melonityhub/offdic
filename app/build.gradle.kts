@@ -1,4 +1,11 @@
 plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }
+
+// The release workflow passes -PappVersionName/-PappVersionCode; a local build keeps the defaults.
+val appVersionName = providers.gradleProperty("appVersionName").getOrElse("0.1.0")
+val appVersionCode = providers.gradleProperty("appVersionCode").getOrElse("1").toInt()
+// -PabiSplits=true (release workflow only) emits one APK per ABI next to the universal one.
+val abiSplits = providers.gradleProperty("abiSplits").getOrElse("false").toBoolean()
+
 android {
     namespace = "org.offdic"
     compileSdk = 35
@@ -6,8 +13,39 @@ android {
         applicationId = "org.offdic"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = appVersionCode
+        versionName = appVersionName
+    }
+    // A real release key can be supplied through repository secrets (OFFDIC_KEYSTORE_FILE,
+    // OFFDIC_KEYSTORE_PASSWORD, OFFDIC_KEY_ALIAS, OFFDIC_KEY_PASSWORD). While none is configured the
+    // release build is signed with the debug key: installable, but not a Play Store or long-term
+    // update key. See docs/RELEASE_FA.md.
+    signingConfigs {
+        val storePath = System.getenv("OFFDIC_KEYSTORE_FILE")
+        if (!storePath.isNullOrBlank()) {
+            create("release") {
+                storeFile = file(storePath)
+                storePassword = System.getenv("OFFDIC_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("OFFDIC_KEY_ALIAS")
+                keyPassword = System.getenv("OFFDIC_KEY_PASSWORD")
+            }
+        }
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
+        }
+    }
+    if (abiSplits) {
+        splits {
+            abi {
+                isEnable = true
+                reset()
+                include("arm64-v8a", "armeabi-v7a", "x86_64")
+                isUniversalApk = true
+            }
+        }
     }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }
