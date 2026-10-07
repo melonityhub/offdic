@@ -1,0 +1,135 @@
+name: Release APK
+
+# Every push to main (i.e. every merged pull request) cuts a release: version 1.0.<run number>,
+# four APKs (one per ABI plus a universal one), checksums, the standalone source ZIP, and a
+# force-updated `drive-artifacts` branch that carries the arm64 APK for the Drive mirror.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Override the automatic 1.0.<run> version (optional)"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      # GitHub's Ubuntu image already ships the Android SDK; reuse it instead of installing tools.
+      - name: Check preinstalled Android SDK
+        run: |
+          test -d "$ANDROID_HOME"
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          if [ ! -f "$ANDROID_HOME/platforms/android-35/android.jar" ]; then
+            "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35'
+          fi
+      - name: Resolve version
+        id: version
+        run: |
+          set -euo pipefail
+          name='${{ inputs.version }}'
+          code=$((1000000 + ${{ github.run_number }}))
+          if [ -z "$name" ]; then name="1.0.${{ github.run_number }}"; fi
+          if git rev-parse "refs/tags/v$name" >/dev/null 2>&1; then
+            echo "::error::tag v$name already exists; dispatch this workflow with another version"
+            exit 1
+          fi
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          echo "Offdic $name (versionCode $code)"
+      - name: Assemble release APKs
+        run: |
+          ./gradlew :app:assembleRelease \
+            -PappVersionName="${{ steps.version.outputs.name }}" \
+            -PappVersionCode="${{ steps.version.outputs.code }}" \
+            -PabiSplits=true --console=plain --stacktrace
+      - name: Collect APKs and checksums
+        id: apks
+        run: |
+          set -euo pipefail
+          version="${{ steps.version.outputs.name }}"
+          dir="$GITHUB_WORKSPACE/artifacts/release"
+          mkdir -p "$dir"
+          for abi in arm64-v8a armeabi-v7a x86_64 universal; do
+            source="app/build/outputs/apk/release/app-${abi}-release.apk"
+            if [ ! -f "$source" ]; then
+              echo "::error::missing $source"
+              find app/build/outputs/apk -name '*.apk'
+              exit 1
+            fi
+            cp "$source" "$dir/offdic-${version}-${abi}.apk"
+          done
+          (cd "$dir" && sha256sum ./*.apk > "SHA256SUMS-${version}.txt")
+          cat "$dir/SHA256SUMS-${version}.txt"
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+      - name: Verify the packaged version
+        run: |
+          set -euo pipefail
+          apk="${{ steps.apks.outputs.dir }}/offdic-${{ steps.version.outputs.name }}-universal.apk"
+          aapt2="$(ls "$ANDROID_HOME"/build-tools/*/aapt2 2>/dev/null | sort -V | tail -1 || true)"
+          if [ -z "$aapt2" ]; then echo "aapt2 not found; skipping badging check"; exit 0; fi
+          "$aapt2" dump badging "$apk" | grep -E '^(package|sdkVersion|targetSdkVersion):' || true
+          "$aapt2" dump badging "$apk" | grep -q "versionName='${{ steps.version.outputs.name }}'" \
+            || { echo "::error::APK versionName does not match the requested version"; exit 1; }
+      - name: Export standalone source ZIP
+        run: python3 tools/export_standalone.py
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="${{ steps.version.outputs.name }}"
+          gh release create "v${version}" \
+            --target "${{ github.sha }}" \
+            --title "Offdic ${version}" \
+            --generate-notes \
+            "${{ steps.apks.outputs.dir }}"/*.apk \
+            "${{ steps.apks.outputs.dir }}/SHA256SUMS-${version}.txt" \
+            artifacts/offdic-standalone.zip
+      # The assistant cannot download release assets from its sandbox, so the arm64 APK is also
+      # published on an orphan branch that is force-updated on every release (no history growth).
+      # It is a shuttle for the Google Drive mirror, not a distribution channel: delete the branch
+      # with `git push origin --delete drive-artifacts` if it is no longer wanted.
+      - name: Publish the arm64 APK on the Drive shuttle branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="${{ steps.version.outputs.name }}"
+          shuttle="$RUNNER_TEMP/shuttle"
+          mkdir -p "$shuttle"
+          cp "${{ steps.apks.outputs.dir }}/offdic-${version}-arm64-v8a.apk" "$shuttle/"
+          cp "${{ steps.apks.outputs.dir }}/SHA256SUMS-${version}.txt" "$shuttle/"
+          {
+            echo "version=$version"
+            echo "apk=offdic-${version}-arm64-v8a.apk"
+            echo "release=https://github.com/${{ github.repository }}/releases/tag/v${version}"
+          } > "$shuttle/RELEASE.txt"
+          cd "$shuttle"
+          git init -q -b drive-artifacts
+          git add -A
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -qm "Offdic ${version} arm64-v8a for the Drive mirror"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" drive-artifacts
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: release-assets
+          path: artifacts/release/
