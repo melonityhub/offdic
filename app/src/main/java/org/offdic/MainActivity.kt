@@ -44,8 +44,8 @@ class MainActivity : Activity() {
     private var dark = false
     private var scale = 1f
     private var debounce: Runnable? = null
-    private val foreground get() = if (dark) Color.WHITE else Color.rgb(5, 19, 30)
-    private val background get() = if (dark) Color.rgb(21, 21, 22) else Color.WHITE
+    private val pageTextColor get() = if (dark) Color.WHITE else Color.rgb(5, 19, 30)
+    private val pageBackgroundColor get() = if (dark) Color.rgb(21, 21, 22) else Color.WHITE
     private val primary get() = getColor(R.color.fdPrimary)
 
     override fun onCreate(state: Bundle?) {
@@ -77,7 +77,7 @@ class MainActivity : Activity() {
     }
 
     private fun createShell() {
-        root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(background) }
+        root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(pageBackgroundColor) }
         // Respect status/navigation bars, including Android 15's enforced edge-to-edge mode.
         root.setOnApplyWindowInsetsListener { v, insets ->
             v.setPadding(insets.systemWindowInsetLeft, insets.systemWindowInsetTop, insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
@@ -134,10 +134,10 @@ class MainActivity : Activity() {
         val active = when(page) { "detail" -> "search"; "history" -> "favorites"; "categories", "category" -> "more"; else -> page }
         tabs.forEach { (key, tab) ->
             tab.isSelected = key == active
-            tab.setTextColor(if (key == active) foreground else primary)
+            tab.setTextColor(if (key == active) pageTextColor else primary)
             tab.compoundDrawables[1]?.apply {
                 state = if (key == active) intArrayOf(android.R.attr.state_checked) else intArrayOf()
-                setTint(if (key == active) foreground else primary)
+                setTint(if (key == active) pageTextColor else primary)
             }
         }
     }
@@ -146,7 +146,7 @@ class MainActivity : Activity() {
         reset("Offdic", "search")
         val search = EditText(this).apply {
             hint = "واژه را وارد کنید / Search"
-            setSingleLine(true); setTextColor(foreground); setHintTextColor(if (dark) Color.LTGRAY else Color.GRAY)
+            setSingleLine(true); setTextColor(pageTextColor); setHintTextColor(if (dark) Color.LTGRAY else Color.GRAY)
             textSize = 17f * scale
             setPadding(dp(16), dp(10), dp(16), dp(10))
             setText(query)
@@ -306,7 +306,7 @@ class MainActivity : Activity() {
             catch (_: ActivityNotFoundException) { toast("انتخاب‌گر فایل روی دستگاه موجود نیست") }
         })
         list.addView(Switch(this).apply {
-            text = "حالت تاریک"; setTextColor(foreground); isChecked = dark
+            text = "حالت تاریک"; setTextColor(pageTextColor); isChecked = dark
             setOnCheckedChangeListener { _, checked -> dark = checked; getPreferences(0).edit().putBoolean("dark", dark).apply(); createShell(); morePage() }
         })
         list.addView(button("اندازهٔ نوشته") {
@@ -327,7 +327,7 @@ class MainActivity : Activity() {
         reset("پروفایل محلی", "profile")
         val list = scrollBody()
         val prefs = getSharedPreferences("profile", 0)
-        val name = EditText(this).apply { hint = "نام نمایشی"; setTextColor(foreground); setText(prefs.getString("name", "")); filters = arrayOf(android.text.InputFilter.LengthFilter(80)) }
+        val name = EditText(this).apply { hint = "نام نمایشی"; setTextColor(pageTextColor); setText(prefs.getString("name", "")); filters = arrayOf(android.text.InputFilter.LengthFilter(80)) }
         list.addView(name)
         list.addView(button("ذخیره روی این دستگاه") { prefs.edit().putString("name", name.text.toString().trim()).apply(); toast("ذخیره شد") })
         list.addView(label("پروفایل محلی است؛ حساب یا همگام‌سازی با سرور اپ اصلی ایجاد نمی‌کند. تمام امکانات محلی بدون ورود و اشتراک در دسترس‌اند."))
@@ -375,13 +375,13 @@ class MainActivity : Activity() {
         return column
     }
     private fun label(value: String, size: Float = 16f) = TextView(this).apply {
-        text = value; textSize = size * scale; setTextColor(foreground)
+        text = value; textSize = size * scale; setTextColor(pageTextColor)
         setPadding(dp(12), dp(10), dp(12), dp(10)); textDirection = View.TEXT_DIRECTION_FIRST_STRONG
         setTextIsSelectable(true)
     }
     private fun html(value: String) = label("").apply { text = Html.fromHtml(value, Html.FROM_HTML_MODE_COMPACT) }
     private fun button(value: String, click: () -> Unit) = Button(this).apply {
-        text = value; textSize = 14f * scale; isAllCaps = false; setTextColor(foreground)
+        text = value; textSize = 14f * scale; isAllCaps = false; setTextColor(pageTextColor)
         setOnClickListener { click() }; minHeight = dp(48)
     }
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()

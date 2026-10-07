@@ -3,6 +3,7 @@ package org.offdic
 import org.json.JSONObject
 import org.json.JSONArray
 import java.net.URI
+import java.net.SocketTimeoutException
 import javax.net.ssl.HttpsURLConnection
 
 /** Calls a user-controlled gateway, never the original app's authenticated service. */
@@ -17,6 +18,12 @@ class AiClient {
         require(prompt.isNotBlank() && prompt.length <= 6000) { "متن باید بین ۱ تا ۶۰۰۰ نویسه باشد" }
         val uri = validateEndpoint(config.endpoint)
         check(!cancelled) { "درخواست لغو شد" }
+        val deadline = System.nanoTime() + config.timeoutSeconds * 1_000_000_000L
+        fun remainingMillis(): Int {
+            val remaining = (deadline - System.nanoTime()) / 1_000_000L
+            if (remaining <= 0) throw SocketTimeoutException("زمان پاسخ سرویس به پایان رسید")
+            return remaining.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+        }
         val connection = uri.toURL().openConnection() as HttpsURLConnection
         active = connection
         try {
@@ -32,6 +39,7 @@ class AiClient {
             val payload = requestBody(config, prompt).toString().toByteArray(Charsets.UTF_8)
             connection.setFixedLengthStreamingMode(payload.size)
             connection.outputStream.use { it.write(payload) }
+            connection.readTimeout = remainingMillis()
             val status = connection.responseCode
             require(status in 200..299) {
                 when (status) {
@@ -47,6 +55,7 @@ class AiClient {
                 val buffer = CharArray(4096)
                 while (true) {
                     check(!cancelled) { "درخواست لغو شد" }
+                    connection.readTimeout = remainingMillis()
                     val n = reader.read(buffer)
                     if (n < 0) break
                     require(result.length + n <= 131072) { "پاسخ سرویس بیش از حد بزرگ است" }
@@ -54,7 +63,8 @@ class AiClient {
                 }
                 result.toString()
             }
-            return parseAnswer(config.protocol, JSONObject(text))
+            val json = runCatching { JSONObject(text) }.getOrElse { error("پاسخ سرویس JSON معتبر نیست؛ نوع API و endpoint را بررسی کنید") }
+            return parseAnswer(config.protocol, json)
         } finally { connection.disconnect(); active = null }
     }
     companion object {
@@ -74,7 +84,7 @@ class AiClient {
         }
 
         fun validateEndpoint(value: String): URI {
-            val uri = URI(value.trim())
+            val uri = runCatching { URI(value.trim()) }.getOrElse { error("نشانی API معتبر نیست") }
             require(uri.scheme == "https" && !uri.host.isNullOrBlank() && uri.userInfo == null && uri.fragment == null && uri.query == null && (uri.port == -1 || uri.port in 1..65535)) {
                 "نشانی HTTPS بدون رمز، query یا fragment وارد کنید"
             }

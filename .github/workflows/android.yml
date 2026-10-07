@@ -52,6 +52,11 @@ jobs:
             app/build/reports/
       - name: Export standalone project
         run: python3 tools/export_standalone.py
+      - name: Verify independent Android build
+        run: |
+          unzip -q artifacts/offdic-standalone.zip -d "$RUNNER_TEMP/independent"
+          cd "$RUNNER_TEMP/independent/offdic-standalone"
+          ./gradlew :app:assembleDebug --console=plain
       - uses: actions/upload-artifact@v4
         with:
           name: offdic-standalone
@@ -77,6 +82,9 @@ jobs:
           arch: x86_64
           disable-animations: true
           script: ./gradlew :app:connectedDebugAndroidTest --console=plain --stacktrace
+      - name: Annotate device test failures
+        if: always()
+        run: python3 tools/annotate_device_tests.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -51,7 +51,12 @@ class AiSettingsActivity : Activity() {
         label("نوع اتصال")
         protocol = Spinner(this).apply {
             id = R.id.ai_protocol
-            adapter = ArrayAdapter(this@AiSettingsActivity, android.R.layout.simple_spinner_dropdown_item, listOf("Gateway اختصاصی (prompt → answer)", "API سازگار با OpenAI Chat Completions"))
+            adapter = object : ArrayAdapter<String>(this@AiSettingsActivity, android.R.layout.simple_spinner_dropdown_item, listOf("Gateway اختصاصی (prompt → answer)", "API سازگار با OpenAI Chat Completions")) {
+                override fun getView(position: Int, convertView: View?, parent: android.view.ViewGroup): View = super.getView(position, convertView, parent).also { (it as TextView).setTextColor(color) }
+                override fun getDropDownView(position: Int, convertView: View?, parent: android.view.ViewGroup): View = super.getDropDownView(position, convertView, parent).also {
+                    (it as TextView).setTextColor(color); it.setBackgroundColor(if (dark) 0xff151516.toInt() else Color.WHITE)
+                }
+            }
             setSelection(persisted.protocol.ordinal)
         }
         root.addView(protocol)
@@ -133,6 +138,9 @@ class AiSettingsActivity : Activity() {
         }, { status.text = it.localizedMessage })
     }
     private fun cancel() { generation++; client?.cancel(); client = null; future?.cancel(true); future = null; if (::test.isInitialized) test.isEnabled = true }
-    override fun onStop() { cancel(); super.onStop() }
+    override fun onStop() {
+        if (::test.isInitialized && !test.isEnabled) status.text = "آزمایش با خروج از صفحه متوقف شد"
+        cancel(); super.onStop()
+    }
     override fun onDestroy() { cancel(); io.shutdownNow(); super.onDestroy() }
 }
