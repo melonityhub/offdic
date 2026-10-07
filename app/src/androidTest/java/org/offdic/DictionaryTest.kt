@@ -42,6 +42,19 @@ class DictionaryTest {
         }
         dictionary.categories().forEach { dictionary.categoryWords(it.id, Language.EN, 0) }
     }
+    @Test fun suggestionRowsCarryTheTranslationPreview() {
+        for (language in Language.entries) {
+            val words = dictionary.search("", language)
+            assertTrue(language.name, words.any { it.preview.isNotBlank() })
+            // The same preview must come back for words read from the user store (favorites, history).
+            val batch = dictionary.previews(words + dictionary.search("", language, 60))
+            words.forEach { assertEquals(it.toString(), it.preview, batch[it].orEmpty()) }
+            // Stored words that no longer exist in the dictionary must not break the list.
+            val missing = Word(999_999_999L, "واژهٔ حذف‌شده", Language.EN)
+            assertEquals("", dictionary.previews(listOf(missing))[missing].orEmpty())
+        }
+    }
+
     @Test fun invalidImportPreservesExistingDatabase() {
         val before = dictionary.search("", Language.EN)
         assertTrue(runCatching { dictionary.install(ByteArrayInputStream("not sqlite".toByteArray())) }.isFailure)

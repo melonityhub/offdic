@@ -13,7 +13,6 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
@@ -129,7 +128,7 @@ class MainActivity : Activity() {
         debounce?.let { handler.removeCallbacks(it) }; debounce = null
         screen = page; selected = null; searchInput = null
         heading.text = title
-        resultWeb?.let { body.removeView(it); it.release() }; resultWeb = null
+        resultWeb?.let { web -> (web.parent as? android.view.ViewGroup)?.removeView(web); web.release() }; resultWeb = null
         body.removeAllViews()
         val active = when(page) { "detail" -> "search"; "history" -> "favorites"; "categories", "category" -> "more"; else -> page }
         tabs.forEach { (key, tab) ->
@@ -205,10 +204,7 @@ class MainActivity : Activity() {
 
     private fun renderPage(target: LinearLayout, words: List<Word>, offset: Int, fetch: (Int, (List<Word>) -> Unit) -> Unit) {
         if (words.isEmpty() && offset == 0) target.addView(label("نتیجه‌ای پیدا نشد؛ دیتابیس نمونه همهٔ واژه‌ها را ندارد."))
-        words.forEach { word -> target.addView(button(word.text) { openWord(word) }.apply {
-            gravity = if (word.language == Language.FA) Gravity.END or Gravity.CENTER_VERTICAL else Gravity.START or Gravity.CENTER_VERTICAL
-            typeface = resources.getFont(if (word.language == Language.EN) R.font.helveticaneueregular else R.font.iransansxregular)
-        }) }
+        words.forEach { word -> target.addView(wordRow(word) { openWord(word) }) }
         if (words.size == 60) {
             val more = button("بیشتر…") { }
             more.setOnClickListener {
@@ -245,10 +241,14 @@ class MainActivity : Activity() {
                 audio.addView(button("تلفظ UK") { speak(word.text, Locale.UK) }, LinearLayout.LayoutParams(0, -2, 1f))
                 body.addView(audio)
             }
-            resultWeb = ResultWebView(this) { id, language ->
-                work({ dictionary.word(id, language) }) { related -> if (related != null) openWord(related) }
-            }.also { web ->
-                body.addView(web, LinearLayout.LayoutParams(-1, 0, 1f))
+            val holder = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+            body.addView(holder, LinearLayout.LayoutParams(-1, 0, 1f))
+            resultWeb = ResultWebView(
+                this,
+                onWord = { id, language -> work({ dictionary.word(id, language) }) { related -> if (related != null) openWord(related) } },
+                onState = { state -> if (state == ResultWebView.State.FAILED && screen == "detail" && selected == word) nativeEntry(holder, entry) }
+            ).also { web ->
+                holder.addView(web, LinearLayout.LayoutParams(-1, -1))
                 web.show(entry, dark, scale)
             }
         }
@@ -263,9 +263,9 @@ class MainActivity : Activity() {
                 .setNegativeButton("لغو", null).setPositiveButton("پاک کردن") { _, _ -> work({ users.clearHistory() }) { savedPage(false) } }.show()
         })
         val list = scrollBody()
-        work({ users.list(favorites) }) { words ->
+        work({ val words = users.list(favorites); words to dictionary.previews(words) }) { (words, previews) ->
             if (words.isEmpty()) list.addView(label("هنوز واژه‌ای ذخیره نشده است."))
-            words.forEach { word -> list.addView(button(word.text) {
+            words.forEach { word -> list.addView(wordRow(word, previews[word].orEmpty()) {
                 work({ dictionary.word(word.id, word.language) }) { found ->
                     if (found == null || found.text != word.text) toast("این واژه در دیتابیس فعلی موجود نیست") else openWord(found)
                 }
@@ -379,7 +379,73 @@ class MainActivity : Activity() {
         setPadding(dp(12), dp(10), dp(12), dp(10)); textDirection = View.TEXT_DIRECTION_FIRST_STRONG
         setTextIsSelectable(true)
     }
-    private fun html(value: String) = label("").apply { text = Html.fromHtml(value, Html.FROM_HTML_MODE_COMPACT) }
+
+    /**
+     * One suggestion row: the word plus its translation preview, the same information the
+     * original search list shows. Without the preview the list only echoed the query.
+     */
+    private fun wordRow(word: Word, preview: String = word.preview, click: () -> Unit): LinearLayout {
+        val persian = word.language == Language.FA
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            // Same shape as the original word_suggestion_item_layout: word over preview, one line each.
+            setPadding(dp(16), dp(8), dp(16), dp(8))
+            minimumHeight = dp(64)
+            isClickable = true; isFocusable = true
+            background = themeBackground()
+        }
+        row.addView(TextView(this).apply {
+            text = word.text; textSize = 20f * scale; setTextColor(pageTextColor)
+            typeface = resources.getFont(if (persian) R.font.iransansxbold else R.font.helveticaneueregular)
+            textDirection = View.TEXT_DIRECTION_FIRST_STRONG
+            gravity = if (persian) Gravity.END else Gravity.START
+            maxLines = 1
+            ellipsize = android.text.TextUtils.TruncateAt.END
+        })
+        if (preview.isNotBlank()) row.addView(TextView(this).apply {
+            text = preview; textSize = 14f * scale
+            setTextColor(if (dark) Color.rgb(163, 163, 163) else getColor(R.color.fdGrey))
+            typeface = resources.getFont(R.font.iransansxregular)
+            maxLines = 1
+            ellipsize = android.text.TextUtils.TruncateAt.END
+            textDirection = View.TEXT_DIRECTION_FIRST_STRONG
+            gravity = if (Language.of(preview) == Language.FA) Gravity.END else Gravity.START
+            setPadding(0, dp(4), 0, 0)
+        })
+        row.contentDescription = if (preview.isBlank()) word.text else word.text + "، " + preview
+        row.setOnClickListener { click() }
+        return row
+    }
+
+    /** Database descriptions are HTML fragments; the native fallback shows their text only. */
+    private fun plain(value: String) = runCatching { android.text.Html.fromHtml(value, android.text.Html.FROM_HTML_MODE_COMPACT).toString() }.getOrDefault(value)
+
+    private fun themeBackground(): android.graphics.drawable.Drawable? {
+        val value = android.util.TypedValue()
+        return if (theme.resolveAttribute(android.R.attr.selectableItemBackground, value, true)) androidx.core.content.ContextCompat.getDrawable(this, value.resourceId) else null
+    }
+
+    /** Guaranteed fallback: a WebView failure must never hide the translation. */
+    private fun nativeEntry(holder: LinearLayout, entry: Entry) {
+        holder.removeAllViews()
+        resultWeb?.let { web -> (web.parent as? android.view.ViewGroup)?.removeView(web); web.release() }
+        resultWeb = null
+        val column = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        holder.addView(ScrollView(this).apply { isFillViewport = true; addView(column) }, LinearLayout.LayoutParams(-1, -1))
+        column.addView(label("نمایش متن واژه به‌صورت ساده؛ موتور WebView پاسخ نداد.", 12f))
+        column.addView(label(entry.word.text, 24f))
+        if (entry.html.isNotBlank()) column.addView(label(plain(entry.html), 14f))
+        for ((index, meaning) in entry.meanings.withIndex()) {
+            val head = (meaning.pos + meaning.labels + listOf(meaning.cefr)).filter { it.isNotBlank() }.joinToString(" · ")
+            if (head.isNotBlank()) column.addView(label("${index + 1}. $head", 13f))
+            column.addView(label(meaning.text, 18f))
+            if (meaning.phonetic.isNotBlank()) column.addView(label(meaning.phonetic, 14f))
+            meaning.sentences.filter { it.isNotBlank() }.forEach { column.addView(label(it, 15f)) }
+        }
+        for ((title, value) in entry.sections) { column.addView(label(title, 14f)); column.addView(label(value, 15f)) }
+        if (entry.meanings.isEmpty()) column.addView(label("معنای این واژه در دیتابیس فعلی موجود نیست."))
+        column.addView(button("تلاش دوباره برای نمایش گرافیکی") { openWord(entry.word) })
+    }
     private fun button(value: String, click: () -> Unit) = Button(this).apply {
         text = value; textSize = 14f * scale; isAllCaps = false; setTextColor(pageTextColor)
         setOnClickListener { click() }; minHeight = dp(48)
@@ -408,7 +474,7 @@ class MainActivity : Activity() {
     override fun onBackPressed() { if (screen != "search") searchPage() else super.onBackPressed() }
     override fun onDestroy() {
         generation++; handler.removeCallbacksAndMessages(null)
-        resultWeb?.let { body.removeView(it); it.release() }; resultWeb = null
+        resultWeb?.let { web -> (web.parent as? android.view.ViewGroup)?.removeView(web); web.release() }; resultWeb = null
         tts?.stop(); tts?.shutdown()
         io.execute { dictionary.close(); users.close() }; io.shutdown()
         super.onDestroy()

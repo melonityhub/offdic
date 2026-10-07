@@ -29,8 +29,21 @@ class ContractTest(unittest.TestCase):
             if literal.startswith('"SELECT '):
                 yield json.loads(literal)
 
-    def expand(self, sql, language):
-        return sql.replace('${p}', language).replace('${word.language.prefix}', language)
+    # Templates the Kotlin sources interpolate into SQL literals. Anything unknown must fail
+    # loudly instead of being EXPLAINed with a stray '$' left in the statement.
+    TEMPLATES = {
+        'p': lambda language, accent: language,
+        'word.language.prefix': lambda language, accent: language,
+        'meaning': lambda language, accent: 'persian_meaning' if language == 'english' else 'english_meaning',
+        'accent': lambda language, accent: accent,
+        'marks': lambda language, accent: '?,?,?',
+    }
+
+    def expand(self, sql, language, accent='american'):
+        for name in sorted(self.TEMPLATES, key=len, reverse=True):
+            value = self.TEMPLATES[name](language, accent)
+            sql = sql.replace('${' + name + '}', value).replace('$' + name, value)
+        return sql
 
     def test_actual_queries_compile_against_sample(self):
         count = 0
@@ -38,7 +51,7 @@ class ContractTest(unittest.TestCase):
             if '$table' in literal: continue  # Dynamic schema check is covered by instrumentation.
             for language in ('english', 'persian'):
                 for accent in ('american', 'british'):
-                    sql = self.expand(literal, language).replace('${accent}', accent)
+                    sql = self.expand(literal, language, accent)
                     self.assertNotIn('$', sql)
                     params = ['0'] * sql.count('?')
                     self.db.execute('EXPLAIN ' + sql, params).fetchall()
@@ -52,14 +65,32 @@ class ContractTest(unittest.TestCase):
             for term in ("' OR 1=1 --", '%', '_', '\\'):
                 escaped = term.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
                 result = self.db.execute(sql, (escaped+'%', term, 0)).fetchall()
-                self.assertTrue(all(text.casefold().startswith(term.casefold()) for _,text in result))
+                self.assertTrue(all(row[1].casefold().startswith(term.casefold()) for row in result))
             first = self.db.execute(sql, ('%', '', 0)).fetchall()
             second = self.db.execute(sql, ('%', '', 60)).fetchall()
             self.assertTrue(first)
-            self.assertFalse(set(first) & set(second))
+            self.assertFalse({row[0] for row in first} & {row[0] for row in second})
             term = first[0][1]
             escaped = term.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
             self.assertEqual(self.db.execute(sql, (escaped+'%', term, 0)).fetchone()[1], term)
+            # Every suggestion row carries the translation preview the UI renders.
+            self.assertEqual(len(first[0]), 3)
+            self.assertTrue([row[2] for row in first if row[2]])
+
+    def test_search_preview_matches_original_first_detail(self):
+        literal = next(s for s in self.sql_literals() if ' ESCAPE ' in s)
+        self.assertIn('d.persian_meaning', self.expand(literal, 'english'))
+        self.assertIn('d.english_meaning', self.expand(literal, 'persian'))
+        for language, word in (('english', 'a'), ('persian', 'آب')):
+            sql = self.expand(literal, language)
+            row = self.db.execute(sql, (word+'%', word, 0)).fetchone()
+            detail = self.db.execute(
+                f'SELECT {"persian_meaning" if language == "english" else "english_meaning"} '
+                f'FROM {language}_details d WHERE d.{language}_word_id=? ORDER BY d.position, d.{language}_detail_id LIMIT 1',
+                (row[0],)).fetchone()
+            self.assertEqual(row[1], word)
+            self.assertEqual(row[2], detail[0])
+            self.assertTrue(row[2])
 
     def test_pos_labels_match_original(self):
         fixture = json.loads((ROOT / 'tests/fixtures/pos_labels.json').read_text())
@@ -120,6 +151,45 @@ class ContractTest(unittest.TestCase):
                 if name == 'xml': continue
                 self.assertIn(name, attributes, str(path))
                 self.assertIn(name, theme_items, str(path))
+
+    def test_result_page_is_self_contained(self):
+        """Regression guard for "webpage not available" / net::ERR_HTTP_RESPONSE_CODE_FAILURE.
+
+        The document is a data URL with a null base URL, exactly like the original
+        WordResultFragment, and everything it renders is inlined. The client must never answer a
+        request with a fabricated HTTP error response: that is what killed the document
+        navigation before and replaced the word page with WebView's error screen.
+        """
+        web = (KOTLIN / 'ResultWebView.kt').read_text()
+        self.assertIn('loadDataWithBaseURL(null,', web)
+        self.assertIn('assets.shouldInterceptRequest(request.url)', web)
+        self.assertNotIn('403', web)
+        self.assertNotIn('ByteArrayInputStream', web)
+        self.assertNotIn('WebResourceResponse("', web)
+        self.assertIn('onReceivedError', web)
+        self.assertIn('onReceivedHttpError', web)
+        html = (KOTLIN / 'ResultHtml.kt').read_text()
+        self.assertNotIn('<link', html)
+        self.assertNotIn('loadUrl(', html)
+        self.assertIn('Content-Security-Policy', html)
+        self.assertIn("data-theme='", html)
+        assets = (KOTLIN / 'ResultAssets.kt').read_text()
+        self.assertIn('Base64.encodeToString', assets)
+        self.assertIn('"data:${mime(path)};base64,"', assets)
+
+    def test_word_page_falls_back_and_shows_previews(self):
+        activity = (KOTLIN / 'MainActivity.kt').read_text()
+        # A WebView failure must never hide the translation.
+        self.assertIn('ResultWebView.State.FAILED', activity)
+        self.assertIn('nativeEntry(holder, entry)', activity)
+        self.assertIn('fun nativeEntry(', activity)
+        # Suggestion rows show the translation preview, not only the echoed query.
+        self.assertIn('fun wordRow(', activity)
+        for call in ('wordRow(word) { openWord(word) }', 'previews[word].orEmpty()'):
+            self.assertIn(call, activity)
+        dictionary = (KOTLIN / 'Dictionary.kt').read_text()
+        self.assertIn('fun previews(words: List<Word>): Map<Word, String>', dictionary)
+        self.assertIn('if (hasPreview) c.getString(2).orEmpty() else ""', dictionary)
 
     def test_camera_and_widget_manifest_contract(self):
         android = '{http://schemas.android.com/apk/res/android}'

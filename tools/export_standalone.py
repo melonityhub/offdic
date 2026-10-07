@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FILES = ['.gitignore', '.github/workflows/android.yml', 'build.gradle.kts', 'settings.gradle.kts',
          'gradle.properties', 'gradlew', 'gradlew.bat', 'dbsample/sample.sqlite', 'dbsample/sample_report.md',
          'tools/test_contract.py', 'tools/test_gateway.py', 'tools/annotate_build.py', 'tools/export_standalone.py',
-         'tools/test_standalone.py', 'tools/annotate_device_tests.py', 'docs/DATABASE_FA.md', 'docs/FEATURES_FA.md', 'docs/AI_SETTINGS_FA.md',
+         'tools/test_standalone.py', 'tools/annotate_device_tests.py', 'docs/DATABASE_FA.md', 'docs/FEATURES_FA.md', 'docs/AI_SETTINGS_FA.md', 'docs/RESULT_PAGE_FA.md',
          'docs/STANDALONE_FA.md', 'docs/BUILD_VERIFICATION_FA.md', 'README_STANDALONE.md']
 DIRECTORIES = ['app/src', 'gradle/wrapper', 'tests/fixtures']
 BLOCKED = {'.git', '.gradle', '.idea', 'build', '__pycache__', '.cache'}

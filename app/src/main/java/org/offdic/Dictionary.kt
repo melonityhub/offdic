@@ -77,17 +77,45 @@ class Dictionary(private val context: Context) : AutoCloseable {
         return selected?.let { detail(it) }
     }
 
+    /**
+     * Prefix search with the same translation preview the original suggestion list shows:
+     * `persian_meaning` for English words, `english_meaning` for Persian words.
+     */
     fun search(query: String, language: Language, offset: Int = 0): List<Word> {
         val p = language.prefix
+        val meaning = previewColumn(language)
         val q = query.trim().replace('ي', 'ی').replace('ك', 'ک')
         val escaped = q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
-        return words("SELECT ${p}_word_id, ${p}_word FROM ${p}_words WHERE ${p}_word LIKE ? ESCAPE '\\' ORDER BY CASE WHEN ${p}_word = ? COLLATE NOCASE THEN 0 ELSE 1 END, ${p}_word COLLATE NOCASE, ${p}_word_id LIMIT 60 OFFSET ?", arrayOf("$escaped%", q, offset.toString()), language)
+        return words("SELECT w.${p}_word_id, w.${p}_word, COALESCE((SELECT d.$meaning FROM ${p}_details d WHERE d.${p}_word_id = w.${p}_word_id ORDER BY d.position, d.${p}_detail_id LIMIT 1), '') FROM ${p}_words w WHERE w.${p}_word LIKE ? ESCAPE '\\' ORDER BY CASE WHEN w.${p}_word = ? COLLATE NOCASE THEN 0 ELSE 1 END, w.${p}_word COLLATE NOCASE, w.${p}_word_id LIMIT 60 OFFSET ?", arrayOf("$escaped%", q, offset.toString()), language)
+    }
+
+    /** Translation previews for words that come from the user store instead of a search. */
+    fun previews(words: List<Word>): Map<Word, String> {
+        val previews = HashMap<Word, String>(words.size)
+        for ((language, group) in words.groupBy { it.language }) {
+            val p = language.prefix
+            val meaning = previewColumn(language)
+            val found = HashMap<Long, String>()
+            // Stay below SQLite's bound-parameter limit; the UI caps lists at 1000 rows.
+            for (chunk in group.distinctBy { it.id }.chunked(400)) {
+                val args = chunk.map { it.id.toString() }.toTypedArray()
+                val marks = args.joinToString(separator = ",") { "?" }
+                db.rawQuery("SELECT w.${p}_word_id, COALESCE((SELECT d.$meaning FROM ${p}_details d WHERE d.${p}_word_id = w.${p}_word_id ORDER BY d.position, d.${p}_detail_id LIMIT 1), '') FROM ${p}_words w WHERE w.${p}_word_id IN ($marks)", args).use { c ->
+                    while (c.moveToNext()) found[c.getLong(0)] = c.getString(1).orEmpty()
+                }
+            }
+            group.forEach { previews[it] = found[it.id].orEmpty() }
+        }
+        return previews
     }
 
     fun word(id: Long, language: Language): Word? {
         val p = language.prefix
-        return words("SELECT ${p}_word_id, ${p}_word FROM ${p}_words WHERE ${p}_word_id=?", arrayOf(id.toString()), language).firstOrNull()
+        val meaning = previewColumn(language)
+        return words("SELECT w.${p}_word_id, w.${p}_word, COALESCE((SELECT d.$meaning FROM ${p}_details d WHERE d.${p}_word_id = w.${p}_word_id ORDER BY d.position, d.${p}_detail_id LIMIT 1), '') FROM ${p}_words w WHERE w.${p}_word_id=?", arrayOf(id.toString()), language).firstOrNull()
     }
+
+    private fun previewColumn(language: Language) = if (language == Language.EN) "persian_meaning" else "english_meaning"
 
     fun categories(): List<Category> = db.rawQuery("SELECT id, persian_category_name, english_category_name FROM category_names WHERE is_hidden=0 ORDER BY id", null).use { c ->
         buildList { while (c.moveToNext()) add(Category(c.getLong(0), c.getString(1), c.getString(2))) }
@@ -95,11 +123,15 @@ class Dictionary(private val context: Context) : AutoCloseable {
 
     fun categoryWords(id: Long, language: Language, offset: Int): List<Word> {
         val p = language.prefix
-        return words("SELECT DISTINCT w.${p}_word_id, w.${p}_word FROM ${p}_words w JOIN ${p}_details d ON d.${p}_word_id=w.${p}_word_id JOIN ${p}_categories c ON c.${p}_detail_id=d.${p}_detail_id WHERE c.category=? ORDER BY w.${p}_word COLLATE NOCASE LIMIT 60 OFFSET ?", arrayOf(id.toString(), offset.toString()), language)
+        val meaning = previewColumn(language)
+        return words("SELECT DISTINCT w.${p}_word_id, w.${p}_word, COALESCE((SELECT d.$meaning FROM ${p}_details d WHERE d.${p}_word_id = w.${p}_word_id ORDER BY d.position, d.${p}_detail_id LIMIT 1), '') FROM ${p}_words w JOIN ${p}_details d ON d.${p}_word_id=w.${p}_word_id JOIN ${p}_categories c ON c.${p}_detail_id=d.${p}_detail_id WHERE c.category=? ORDER BY w.${p}_word COLLATE NOCASE LIMIT 60 OFFSET ?", arrayOf(id.toString(), offset.toString()), language)
     }
 
     private fun words(sql: String, args: Array<String>, language: Language) = db.rawQuery(sql, args).use { c ->
-        buildList { while (c.moveToNext()) add(Word(c.getLong(0), c.getString(1), language)) }
+        buildList {
+            val hasPreview = c.columnCount > 2
+            while (c.moveToNext()) add(Word(c.getLong(0), c.getString(1), language, if (hasPreview) c.getString(2).orEmpty() else ""))
+        }
     }
 
     fun detail(word: Word): Entry {
@@ -156,7 +188,7 @@ class Dictionary(private val context: Context) : AutoCloseable {
 
 private fun Cursor.text(column: String): String = getColumnIndex(column).let { if (it < 0 || isNull(it)) "" else getString(it) }
 enum class Language(val prefix: String) { EN("english"), FA("persian"); companion object { fun of(text: String) = if (text.any { it in '\u0600'..'\u06ff' }) FA else EN } }
-data class Word(val id: Long, val text: String, val language: Language)
+data class Word(val id: Long, val text: String, val language: Language, val preview: String = "")
 data class Meaning(val text: String, val pos: List<String>, val sentences: List<String>, val html: String, val cefr: String, val phonetic: String, val labels: List<String>)
 data class Entry(val word: Word, val meanings: List<Meaning>, val sections: List<Pair<String, String>>, val idioms: List<Word>, val html: String)
 data class Category(val id: Long, val persian: String, val english: String)
