@@ -2,11 +2,7 @@ dic/dict:smali
 
 sourcecode: decrepted java
 
-<<<<<<< HEAD
-en_fa.zip:google fa translate offline
-=======
 [گزارش رفع خطا و بیلد واقعی](docs/BUILD_VERIFICATION_FA.md) · [ریلیز خودکار APK](docs/RELEASE_FA.md) · [تنظیمات API](docs/AI_SETTINGS_FA.md) · [خروجی مستقل](docs/STANDALONE_FA.md)
->>>>>>> arena/88832cb8-offdic
 
 dbsample:sample of database without sqlcipher key to understand the db structure the main db is "fastdic_plain.sqlite" which is not in this repo bc it's too heave but the sample is and labeling is requierd bc some columns use codenumber instead of label like pos,etc
 
@@ -14,9 +10,6 @@ res:res
 
 assets:assets
 
-<<<<<<< HEAD
-original:original
-=======
 ```text
 app/src/main/assets/databases/fastdic_plain.sqlite
 ```
@@ -107,4 +100,3 @@ python3 tools/test_standalone.py
 | `docs/` | چک‌لیست، موجودی سورس، گزارش تست و راهنمای دیتابیس |
 
 شناسهٔ اپ جدید `org.offdic` است تا با اپ اصلی تداخل نکند. انتقال خودکار داده‌های خصوصی اپ اصلی انجام نمی‌شود. مجوز فونت‌های مالکیتی و حق استفاده از منابع اپ اصلی باید پیش از انتشار مستقل بررسی شود؛ متن مجوز موجود همراه فونت‌ها حفظ شده است.
->>>>>>> arena/88832cb8-offdic

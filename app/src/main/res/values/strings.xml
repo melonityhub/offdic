@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Offdic</string>
+    <string name="ai_settings_title">تنظیمات AI / API</string>
+    <string name="tools_title">ترجمه / دوربین / OCR</string>
+    <string name="widget_label">واژهٔ روز</string>
+    <string name="widget_description">واژهٔ روز انتخاب‌شده از دیتابیس محلی.</string>
+    <string name="widget_empty">دیتابیس آماده نیست</string>
+</resources>
