@@ -1,6 +1,7 @@
 <resources>
     <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
         <item name="android:fontFamily">@font/iransansxregular</item>
+        <item name="tabBarDefault">@color/fdPrimary</item>
         <item name="android:colorAccent">@color/fdPrimary</item>
         <item name="android:statusBarColor">@color/fdPrimary</item>
         <item name="android:navigationBarColor">@android:color/white</item>

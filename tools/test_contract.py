@@ -111,6 +111,16 @@ class ContractTest(unittest.TestCase):
         for asset in re.findall(r'https://appassets.androidplatform.net/assets/([^\s)"\']+)', css):
             self.assertTrue((ROOT / 'app/src/main/assets' / asset).is_file(), asset)
 
+    def test_custom_theme_attributes_are_defined(self):
+        resources = ROOT / 'app/src/main/res'
+        attributes = {e.get('name') for p in resources.glob('values*/*.xml') for e in ET.parse(p).getroot().iter('attr')}
+        theme_items = {e.get('name') for p in resources.glob('values*/styles.xml') for e in ET.parse(p).getroot().iter('item')}
+        for path in resources.rglob('*.xml'):
+            for name in re.findall(r'\?(?:attr/)?([A-Za-z_][A-Za-z_0-9]*)(?![A-Za-z_0-9:])', path.read_text()):
+                if name == 'xml': continue
+                self.assertIn(name, attributes, str(path))
+                self.assertIn(name, theme_items, str(path))
+
     def test_camera_and_widget_manifest_contract(self):
         android = '{http://schemas.android.com/apk/res/android}'
         app = ET.parse(ROOT / 'app/src/main/AndroidManifest.xml').getroot().find('application')

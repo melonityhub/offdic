@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
-      - run: python3 tools/test_contract.py && python3 tools/test_gateway.py
+      - run: python3 tools/test_contract.py && python3 tools/test_gateway.py && python3 tools/test_standalone.py
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
