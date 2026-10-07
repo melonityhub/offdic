@@ -2,28 +2,70 @@ name: Kotlin Android checks
 on:
   push:
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: android-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  host-tests:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v5
+      - run: python3 tools/test_contract.py && python3 tools/test_gateway.py
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
-      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
-      - uses: gradle/actions/setup-gradle@v4
+      # GitHub's Ubuntu Android image already includes the SDK. Avoid re-downloading
+      # command-line tools through the failing setup-android action.
+      - name: Check preinstalled Android SDK
+        run: |
+          test -d "$ANDROID_HOME"
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          if [ ! -f "$ANDROID_HOME/platforms/android-35/android.jar" ]; then
+            "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35'
+          fi
+      - name: Assemble and lint
+        shell: bash
+        run: |
+          set +e
+          ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest :app:lintDebug --console=plain --stacktrace 2>&1 | tee gradle-build.log
+          result=${PIPESTATUS[0]}
+          if [ "$result" -ne 0 ]; then
+            python3 tools/annotate_build.py gradle-build.log
+          fi
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          gradle-version: '8.9'
-      - run: python3 tools/test_contract.py && python3 tools/test_gateway.py
-      - run: gradle :app:assembleDebug :app:assembleDebugAndroidTest :app:lintDebug --stacktrace
+          name: build-results
+          path: |
+            gradle-build.log
+            app/build/outputs/apk/
+            app/build/reports/
+      - name: Export standalone project
+        run: python3 tools/export_standalone.py
       - uses: actions/upload-artifact@v4
         with:
-          name: offdic-debug
-          path: app/build/outputs/apk/debug/*.apk
+          name: offdic-standalone
+          path: artifacts/offdic-standalone.zip
+  device-tests:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
       - name: Enable emulator acceleration
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -34,7 +76,7 @@ jobs:
           api-level: 35
           arch: x86_64
           disable-animations: true
-          script: gradle :app:connectedDebugAndroidTest --stacktrace
+          script: ./gradlew :app:connectedDebugAndroidTest --console=plain --stacktrace
       - uses: actions/upload-artifact@v4
         if: always()
         with:

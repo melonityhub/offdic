@@ -13,3 +13,6 @@ app/src/main/assets/databases/*.sqlite
 .env.*
 __pycache__/
 *.pyc
+artifacts/
+.tooling/
+gradle-build.log

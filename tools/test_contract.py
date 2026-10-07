@@ -62,16 +62,14 @@ class ContractTest(unittest.TestCase):
             self.assertEqual(self.db.execute(sql, (escaped+'%', term, 0)).fetchone()[1], term)
 
     def test_pos_labels_match_original(self):
-        original = (ROOT / 'sourcecode/utils/FDWordPartOfSpeech.java').read_text()
+        fixture = json.loads((ROOT / 'tests/fixtures/pos_labels.json').read_text())
         port = (KOTLIN / 'PartOfSpeech.kt').read_text()
         for method, count in [('getEnglish', 34), ('getPersian', 31), ('findEnglishEquivalentInPersian', 34)]:
-            section = original.split('public final String '+method+'(int posId) {')[1].split('\n    }')[0]
-            pairs = dict(re.findall(r'case (\d+):\s+return (.*?);', section))
+            pairs = fixture[method]
             self.assertEqual(len(pairs), count)
             kotlin = port.split('fun '+method+'(')[1].split('\n    }')[0]
-            for code,value in pairs.items():
-                if 'SYMBOL' in value: value = '"symbol"'
-                self.assertIn(f'{code} -> {value}', kotlin)
+            actual = {code: json.loads(value) for code, value in re.findall(r'(\d+) -> ("(?:[^"\\]|\\.)*")', kotlin)}
+            self.assertEqual(actual, pairs)
 
     def test_new_app_excludes_original_sdks(self):
         manifest = ET.parse(ROOT / 'app/src/main/AndroidManifest.xml')

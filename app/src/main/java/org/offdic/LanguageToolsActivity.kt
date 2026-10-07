@@ -63,7 +63,7 @@ class LanguageToolsActivity : Activity() {
         fun text(value: String) = TextView(this).apply { text = value; setTextColor(textColor); textSize = 15f; setPadding(0, dp(8), 0, dp(8)) }
         if (mode == "ai") {
             content.addView(text("متن فقط پس از تأیید به سرویس HTTPS تنظیم‌شده ارسال می‌شود. این برنامه مدل AI داخلی یا حساب سرویس اصلی ندارد."))
-            content.addView(Button(this).apply { this.text = "تنظیم نشانی سرویس AI"; setOnClickListener { configureAi() } })
+            content.addView(Button(this).apply { this.text = "تنظیمات AI / API"; setOnClickListener { configureAi() } })
         } else {
             content.addView(text("ترجمهٔ انگلیسی ↔ فارسی روی دستگاه انجام می‌شود. در اولین استفاده مدل‌ها دانلود می‌شوند. OCR این نسخه متن لاتین/انگلیسی را می‌خواند، نه خط فارسی."))
             val row = LinearLayout(this)
@@ -104,33 +104,12 @@ class LanguageToolsActivity : Activity() {
     }
 
     private fun configureAi() {
-        val prefs = getSharedPreferences("ai", 0)
-        val field = EditText(this).apply { hint = "https://your-server.example/ai"; setText(prefs.getString("endpoint", "")); inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_URI }
-        val tokenField = EditText(this).apply {
-            hint = "توکن gateway (اختیاری)"; inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-            filters = arrayOf(InputFilter.LengthFilter(4096))
-            setText(runCatching { AiCredentials(this@LanguageToolsActivity).load() }.getOrDefault(""))
-        }
-        val fields = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; addView(field); addView(tokenField) }
-        val dialog = AlertDialog.Builder(this).setTitle("نشانی gateway متعلق به شما")
-            .setMessage("کلید API را در اپ یا URL قرار ندهید. gateway باید POST با prompt بپذیرد و JSON دارای answer برگرداند.")
-            .setView(fields).setNegativeButton("لغو", null).setPositiveButton("ذخیره", null).create()
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                runCatching {
-                    val endpoint = AiClient.validateEndpoint(field.text.toString())
-                    AiCredentials(this).save(tokenField.text.toString().trim())
-                    endpoint
-                }.fold({
-                    prefs.edit().putString("endpoint", it.toString()).apply(); dialog.dismiss()
-                }, { field.error = it.localizedMessage })
-            }
-        }
-        dialog.show()
+        startActivity(Intent(this, AiSettingsActivity::class.java))
     }
 
     private fun askAi() {
-        val endpoint = getSharedPreferences("ai", 0).getString("endpoint", "").orEmpty()
+        val config = AiSettings.load(this)
+        val endpoint = config.endpoint
         if (endpoint.isBlank()) { configureAi(); return }
         val prompt = input.text.toString().trim()
         if (prompt.isEmpty()) { input.error = "متن وارد کنید"; return }
@@ -140,7 +119,7 @@ class LanguageToolsActivity : Activity() {
             .setNegativeButton("لغو", null).setPositiveButton("ارسال") { _, _ ->
                 cancel()
                 val client = AiClient().also { ai = it }
-                launch("در انتظار پاسخ AI…", { client.ask(endpoint, prompt, AiCredentials(applicationContext).load()) }) { output.text = it }
+                launch("در انتظار پاسخ AI…", { client.ask(config, prompt, AiCredentials(applicationContext).load()) }) { output.text = it }
             }.show()
     }
 

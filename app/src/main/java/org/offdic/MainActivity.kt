@@ -297,6 +297,7 @@ class MainActivity : Activity() {
         reset("بیشتر", "more")
         val list = scrollBody()
         list.addView(button("ترجمهٔ متن / دوربین / OCR") { tools("translate") })
+        list.addView(button("تنظیمات AI / API") { startActivity(Intent(this, AiSettingsActivity::class.java)) })
         list.addView(button("هوش مصنوعی") { tools("ai") })
         list.addView(button("راهنمای ویجت") { AlertDialog.Builder(this).setMessage("در صفحهٔ اصلی گوشی نگه دارید، Widgets را باز کنید و Offdic را اضافه کنید. واژهٔ روز از دیتابیس محلی انتخاب می‌شود.").setPositiveButton("باشه", null).show() })
         list.addView(button("دسته‌بندی واژه‌ها") { categoriesPage() })
