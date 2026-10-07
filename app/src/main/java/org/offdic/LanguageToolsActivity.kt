@@ -143,22 +143,30 @@ class LanguageToolsActivity : Activity() {
 
     private fun camera() {
         cancel()
-        val directory = File(cacheDir, "camera").apply { mkdirs() }
-        // Remove abandoned capture files, but not a file from another active activity.
-        directory.listFiles()?.filter { System.currentTimeMillis() - it.lastModified() > 86400000 }?.forEach { it.delete() }
-        val file = File.createTempFile("capture-", ".jpg", directory)
-        val uri = FileProvider.getUriForFile(this, "$packageName.files", file).also { cameraUri = it }
+        var capture: File? = null
         try {
+            val directory = File(cacheDir, "camera").apply { check(isDirectory || mkdirs()) { "فضای دوربین قابل ایجاد نیست" } }
+            directory.listFiles()?.filter { System.currentTimeMillis() - it.lastModified() > 86400000 }?.forEach { it.delete() }
+            val file = File.createTempFile("capture-", ".jpg", directory).also { capture = it }
+            val uri = FileProvider.getUriForFile(this, "$packageName.files", file).also { cameraUri = it }
             startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
                 putExtra(MediaStore.EXTRA_OUTPUT, uri)
                 clipData = ClipData.newRawUri("capture", uri)
                 addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }, CAMERA)
-        } catch (_: ActivityNotFoundException) { status.text = "برنامهٔ دوربین در دسترس نیست"; file.delete(); cameraUri = null }
+        } catch (error: Exception) {
+            capture?.delete(); cameraUri = null
+            status.text = when (error) {
+                is ActivityNotFoundException -> "برنامهٔ دوربین در دسترس نیست"
+                is SecurityException -> "دسترسی به دوربین توسط دستگاه محدود شده است"
+                else -> "آماده‌سازی دوربین ممکن نشد؛ فضای ذخیره‌سازی را بررسی کنید"
+            }
+        }
     }
     private fun pickImage() {
         try { startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT).apply { type = "image/*"; addCategory(Intent.CATEGORY_OPENABLE) }, IMAGE) }
         catch (_: ActivityNotFoundException) { status.text = "انتخاب‌گر فایل در دسترس نیست" }
+        catch (_: SecurityException) { status.text = "انتخاب تصویر توسط دستگاه محدود شده است" }
     }
     @Deprecated("Platform result callback")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
