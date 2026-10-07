@@ -1,9 +1,0 @@
-<resources>
-    <item type="id" name="ai_protocol" />
-    <item type="id" name="ai_endpoint" />
-    <item type="id" name="ai_model" />
-    <item type="id" name="ai_system" />
-    <item type="id" name="ai_timeout" />
-    <item type="id" name="ai_key" />
-    <item type="id" name="ai_clear_key" />
-</resources>
