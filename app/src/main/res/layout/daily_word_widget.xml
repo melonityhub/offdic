@@ -1,0 +1,12 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root" android:orientation="vertical" android:background="@color/fdBlack80"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView android:id="@+id/widget_date" android:layout_width="match_parent" android:layout_height="45dp"
+        android:background="@color/fdBlack" android:textColor="#ffffff" android:gravity="center_vertical|end"
+        android:paddingHorizontal="12dp" android:text="واژهٔ روز · Offdic" android:textSize="14sp" />
+    <TextView android:id="@+id/widget_word" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="12dp" android:textColor="#ffffff" android:text="Offdic" android:maxLines="1" android:ellipsize="end" android:textSize="24sp" />
+    <TextView android:id="@+id/widget_meaning" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp" android:paddingBottom="12dp" android:textColor="#ffffff"
+        android:maxLines="3" android:ellipsize="end" android:textSize="15sp" android:textDirection="firstStrong" />
+</LinearLayout>
