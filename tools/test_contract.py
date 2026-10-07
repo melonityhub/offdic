@@ -172,6 +172,10 @@ class ContractTest(unittest.TestCase):
         self.assertNotIn('<link', html)
         self.assertNotIn('loadUrl(', html)
         self.assertIn('Content-Security-Policy', html)
+        # Nothing external is referenced any more, so the policy must not keep the dead
+        # appassets virtual host: the device test asserts the rendered document too.
+        self.assertNotIn('appassets', html)
+        self.assertIn("style-src 'unsafe-inline'; font-src data:; img-src data:;", html)
         self.assertIn("data-theme='", html)
         assets = (KOTLIN / 'ResultAssets.kt').read_text()
         self.assertIn('Base64.encodeToString', assets)

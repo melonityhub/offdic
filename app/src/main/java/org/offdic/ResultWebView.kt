@@ -39,16 +39,19 @@ class ResultWebView(
         }
         webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) {
+                // The initial empty document is about:blank; only the entry document is a data URL.
+                if (url?.startsWith("about:") == true) return
                 failed = false
                 onState(State.LOADING)
             }
 
             override fun onPageFinished(view: WebView, url: String?) {
+                if (url?.startsWith("about:") == true) return
                 if (!failed) onState(State.RENDERED)
             }
 
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
-                if (!request.isForMainFrame) return
+                if (!request.isForMainFrame || request.url.scheme == "about") return
                 failed = true
                 onState(State.FAILED)
             }

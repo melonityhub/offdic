@@ -37,11 +37,12 @@ WebResourceResponse("text/plain", "UTF-8", 403, "Blocked", emptyMap(), ByteArray
 
 - کلاس‌های `no-js` و `is-darkmode` و ویژگی `data-theme` با هم تنظیم می‌شوند تا CSS اصلی `.results{opacity:0}` را در هیچ حالتی پنهان نکند.
 - برچسب‌های شمارش‌پذیری/رسمی/لهجه به فارسی نگاشت می‌شوند و همهٔ متن دیتابیس escape می‌شود؛ JavaScript، دسترسی فایل، دسترسی محتوا و بارگذاری شبکه در WebView خاموش است.
-- هدرهای CSP فقط `'unsafe-inline'` برای استایل و `data:` برای فونت/تصویر را مجاز می‌کنند.
+- هدرهای CSP فقط `'unsafe-inline'` برای استایل و `data:` برای فونت/تصویر را مجاز می‌کنند و هیچ میزبان شبکه‌ای (از جمله میزبان مجازی appassets) در سیاست نمانده؛ آزمون میزبان و آزمون دستگاه هر دو این را قفل می‌کنند.
 - `onRenderProcessGone` به‌جای Toast، مسیر جایگزین بومی را فعال می‌کند.
+- سند خالی اولیهٔ WebView (`about:blank`) وضعیت `RENDERED` را فعال نمی‌کند؛ پس `RENDERED` همیشه یعنی «سند نتیجه تمام شد» و `FAILED` همیشه یعنی خطای همان سند.
 
 ## آزمون‌ها
 
 - `tools/test_contract.py`: نگهبان رگرسیون `test_result_page_is_self_contained` (نبود پاسخ ساختگی، base URL برابر `null`، نبود `<link>` بیرونی)، `test_search_preview_matches_original_first_detail` و `test_word_page_falls_back_and_shows_previews`. جمعاً ۱۳ آزمون میزبان.
-- `app/src/androidTest/.../ResultPageTest.kt` (دستگاهی): بارگذاری واقعی یک واژه در WebView و تأیید اینکه وضعیت `RENDERED` است (نه `FAILED`) و عنوان سند همان واژه است؛ به‌علاوه بررسی اینکه CSS درون‌خطی هیچ ارجاع بیرونی ندارد.
+- `app/src/androidTest/.../ResultPageTest.kt` (دستگاهی): بارگذاری واقعی یک واژه در WebView. چون سند یک data URL است و می‌تواند پیش از چیدمان (layout) نمای تازه‌اضافه‌شده تمام شود، آزمون تا ۲۰ ثانیه نظرسنجی می‌کند تا عنوان سند همان واژه و ارتفاع محتوا بزرگ‌تر از صفر شود و در پیام خطا نشانی/وضعیت‌ها را چاپ می‌کند؛ به‌علاوه بررسی اینکه CSS درون‌خطی هیچ ارجاع بیرونی ندارد و CSP هم میزبان مجازی را نام نمی‌برد.
 - `DictionaryTest.suggestionRowsCarryTheTranslationPreview` (دستگاهی): وجود پیش‌نمایش برای هر دو زبان و یکسان بودن نتیجهٔ `previews()` با ستون پیش‌نمایش `search()`.

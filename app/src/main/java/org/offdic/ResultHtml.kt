@@ -33,7 +33,10 @@ object ResultHtml {
         append("<!doctype html><html lang='${if (persianWord) "fa" else "en"}' dir='${if (persianWord) "rtl" else "ltr"}' class='no-js${if (dark) " is-darkmode" else ""}' data-theme='${if (dark) "dark" else "light"}'>")
         append("<head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>")
         append("<title>${escape(entry.word.text)}</title>")
-        append("<meta http-equiv='Content-Security-Policy' content=\"default-src 'none'; style-src 'unsafe-inline' https://appassets.androidplatform.net; font-src data: https://appassets.androidplatform.net; img-src data: https://appassets.androidplatform.net;\">")
+        // Nothing outside the document is referenced any more (styles, fonts and icons are inlined
+        // data URIs), so the policy allows no origin at all: the asset virtual host must never
+        // come back into the document.
+        append("<meta http-equiv='Content-Security-Policy' content=\"default-src 'none'; style-src 'unsafe-inline'; font-src data:; img-src data:;\">")
         append("<style>").append(css).append("</style>")
         append("<style>")
         append("html{font-size:${62.5f * scale.coerceIn(0.8f, 1.6f)}%}")

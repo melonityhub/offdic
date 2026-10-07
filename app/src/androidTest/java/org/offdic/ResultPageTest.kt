@@ -7,8 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
+import java.util.Collections
 
 /**
  * End-to-end check of the word page. It must render the entry instead of WebView's
@@ -16,35 +15,45 @@ import java.util.concurrent.TimeUnit
  */
 @RunWith(AndroidJUnit4::class)
 class ResultPageTest {
+    private val word = "a"
+    private val meaning = "حرف اول الفبای انگلیسی"
     private val entry = Entry(
-        Word(33583, "a", Language.EN),
-        listOf(Meaning("حرف اول الفبای انگلیسی", listOf("noun"), listOf("a book"), "", "A1", "", listOf("countable"))),
+        Word(33583, word, Language.EN),
+        listOf(Meaning(meaning, listOf("noun"), listOf("a book"), "", "A1", "", listOf("countable"))),
         listOf("مترادف و متضاد" to "an"),
         emptyList(),
         "<b>حرف تعریف</b>"
     )
 
     @Test fun wordPageRendersTheEntryInsteadOfAnErrorPage() {
-        val latch = CountDownLatch(1)
-        var state: ResultWebView.State? = null
-        lateinit var web: ResultWebView
+        val states = Collections.synchronizedList(mutableListOf<ResultWebView.State>())
         ActivityScenario.launch(MainActivity::class.java).use { scenario ->
+            lateinit var web: ResultWebView
             scenario.onActivity { activity ->
-                web = ResultWebView(activity, { _, _ -> }, { settled ->
-                    state = settled
-                    if (settled != ResultWebView.State.LOADING) latch.countDown()
-                })
+                web = ResultWebView(activity, { _, _ -> }) { settled -> states.add(settled) }
                 activity.addContentView(web, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600))
                 web.show(entry, false, 1f)
             }
-            assertTrue("صفحهٔ واژه در ۳۰ ثانیه بارگذاری نشد", latch.await(30, TimeUnit.SECONDS))
-            assertEquals("WebView صفحهٔ خطا نشان داد", ResultWebView.State.RENDERED, state)
-            scenario.onActivity {
-                // WebView exposes the document title without JavaScript; an error page has none of it.
-                web.title?.let { assertEquals("a", it) }
-                assertTrue("محتوای صفحه خالی است", web.contentHeight > 0)
-                web.release()
+            // The document is a data URL, so it can finish loading before the freshly added view has
+            // been laid out. Poll instead of sampling once: the title comes from the parsed entry
+            // document (WebView's error page has none) and the height proves the page was really drawn.
+            var title: String? = null
+            var height = 0
+            var url: String? = null
+            val deadline = System.currentTimeMillis() + 20_000
+            while (System.currentTimeMillis() < deadline) {
+                scenario.onActivity {
+                    title = web.title
+                    height = web.contentHeight
+                    url = web.url
+                }
+                if (title == word && height > 0) break
+                Thread.sleep(250)
             }
+            assertFalse("WebView صفحهٔ خطا نشان داد (وضعیت‌ها: $states)", states.contains(ResultWebView.State.FAILED))
+            assertEquals("سند نتیجه بارگذاری نشد (نشانی: $url، وضعیت‌ها: $states)", word, title)
+            assertTrue("محتوای صفحه خالی است (نشانی: $url، عنوان: $title)", height > 0)
+            scenario.onActivity { web.release() }
         }
     }
 
