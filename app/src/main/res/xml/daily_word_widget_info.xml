@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kept to pre-API-31 attributes only so the widget builds and runs on the API 26 minimum
+     without lint NewApi errors. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/daily_word_widget"
+    android:minHeight="80dp"
+    android:minResizeHeight="80dp"
+    android:minResizeWidth="140dp"
+    android:minWidth="140dp"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />

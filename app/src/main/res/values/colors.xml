@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core palette taken from the original app so the new build keeps the same look. -->
+    <color name="fdPrimary">#ff1b5f9e</color>
+    <color name="fdPrimaryLight">#ff2974ba</color>
+    <color name="fdBlack">#ff05131e</color>
+    <color name="fdBlack80">#cc05131e</color>
+    <color name="fdGrey">#ff616669</color>
+    <color name="fdGreyLightest">#ffeaeff2</color>
+    <color name="fdWhite">#ffffffff</color>
+    <!-- Launcher / widget surfaces. -->
+    <color name="ic_launcher_background">#ff1b5f9e</color>
+    <color name="widget_surface">#ffffffff</color>
+    <color name="widget_surface_dark">#ff151516</color>
+</resources>
