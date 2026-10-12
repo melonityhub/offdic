@@ -1,0 +1,4 @@
+9470cf2e269e733dd75ddd6ac83df9a8036fa4f129e689afb0cf8741075bc1bb  ./offdic-1.0.3-arm64-v8a.apk
+a4dbf20ca47f76a7ca0ab914081a3927516df562ffc8df7c06688d3b5643f647  ./offdic-1.0.3-armeabi-v7a.apk
+c846eadd38f8590cdb5bfe8af5003fd279364e960f7274880e3969004dc2d683  ./offdic-1.0.3-universal.apk
+4cde279fa3a5fca8f6508f7a0c85a076af8cde6630996fd8ed0e81ca71193b0d  ./offdic-1.0.3-x86_64.apk
