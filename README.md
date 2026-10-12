@@ -2,7 +2,7 @@ dic/dict:smali
 
 sourcecode: decrepted java
 
-[گزارش رفع خطا و بیلد واقعی](docs/BUILD_VERIFICATION_FA.md) · [ریلیز خودکار APK](docs/RELEASE_FA.md) · [تنظیمات API](docs/AI_SETTINGS_FA.md) · [خروجی مستقل](docs/STANDALONE_FA.md)
+[گزارش رفع خطا و بیلد واقعی](docs/BUILD_VERIFICATION_FA.md) · [ریلیز خودکار APK](docs/RELEASE_FA.md) · [تنظیمات API](docs/AI_SETTINGS_FA.md) · [خروجی مستقل](docs/STANDALONE_FA.md) · [مدل‌های ترجمهٔ آفلاین](docs/OFFLINE_TRANSLATION_MODELS_FA.md)
 
 dbsample:sample of database without sqlcipher key to understand the db structure the main db is "fastdic_plain.sqlite" which is not in this repo bc it's too heave but the sample is and labeling is requierd bc some columns use codenumber instead of label like pos,etc
 
